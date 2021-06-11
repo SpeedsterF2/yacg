@@ -1,3 +1,6 @@
+# 2.0.0
+* add AsyncApi support (https://www.asyncapi.com/)
+
 # 1.3.0
 * add '--flattenInheritance' command line switch
 * introduce 'yacgFlattenType' type tag
