@@ -1,0 +1,34 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "yacg types for asyncapi support",
+    "description": "the yacg standard model included the type spefic aspects, this model cares about the additional definitions",
+    "version": "0.0.1",
+    "__domain": "yacg.model.asyncapi",
+    "definitions": {
+        "Server": {
+            "description": "one entry of the servers section",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "protocol": {
+                    "type": "string"
+                },
+                "protocolVersion": {
+                    "type": "string"
+                }
+            }            
+        },
+        "Channel": {
+            "description": "one entry of the channels section",
+            "type": "object",            
+            "properties": {
+                
+            }
+        }
+    }
+}
