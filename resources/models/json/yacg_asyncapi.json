@@ -5,6 +5,51 @@
     "version": "0.0.1",
     "__domain": "yacg.model.asyncapi",
     "definitions": {
+        "AsyncApiDefinition": {
+            "description": "subset of attribs, https://www.asyncapi.com/docs/specifications/v2.0.0#A2SObject",
+            "type": "object",
+            "properties": {
+                "info": {
+                    "$ref": "#/definitions/Info"
+                },
+                "servers": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Server"
+                    }
+                },
+                "channels": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Channel"
+                    }
+                },
+                "components": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Server"
+                    }
+                },
+                "tags": {
+
+                }
+            }
+        },
+        "Info": {
+            "description": "Subset of the info object attribs: https://www.asyncapi.com/docs/specifications/v2.0.0#infoObject",
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                }
+            }
+        },
         "Server": {
             "description": "one entry of the servers section",
             "type": "object",
