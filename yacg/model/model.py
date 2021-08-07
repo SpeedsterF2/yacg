@@ -392,6 +392,26 @@ class DateTimeType (Type):
         return obj
 
 
+class BytesType (Type):
+    """ type for byte values, it will usually be rendered to a byte array
+    """
+
+    def __init__(self):
+        super(Type, self).__init__()
+
+        #: type for byte values, it will usually be rendered to a byte array
+        self.default = None
+
+    @classmethod
+    def dictToObject(cls, dict):
+        if dict is None:
+            return None
+        obj = cls()
+
+        obj.default = dict.get('default', None)
+        return obj
+
+
 class ComplexType (Type):
     """ complex type description
     """

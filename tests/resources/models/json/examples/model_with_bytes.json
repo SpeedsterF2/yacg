@@ -282,6 +282,11 @@
           "description": "value of the custom parameter",
           "type": "string"
         },
+        "bValue": {
+          "description": "a useless byte value",
+          "type": "string",
+          "format": "byte"
+        },
         "requiredDomains": {
           "description": "if set then this parameter only effected types of the specific domains",
           "type": "array",
@@ -313,6 +318,14 @@
         "name": {
           "description": "short visual identifier",
           "type": "string"
+        },
+        "bValues": {
+          "description": "a more useless byte array :D",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "byte"  
+          }
         },
         "description": {
             "description": "some words to explain",

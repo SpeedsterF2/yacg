@@ -1,5 +1,31 @@
+# 3.1.0
+* add some kind of AsyncApi support (https://www.asyncapi.com/)
+
+# 3.0.0
+* replace '__' prefix for custom extensions with 'x-' prefix
+* add some modelFuncs to facilitate the usage of openApi models in templates
+
+# 2.1.2
+* fix a bug in handling single type models w/o any title
+
+# 2.1.1
+* put the new helper scripts to the docker image
+* fix reference extentions to yaml or json depending the convertion
+
+# 2.1.0
+* modelToYaml script
+* modelToJson script
+* enable usage of stdin for modelTo[Json|Yaml] scripts
+
 # 2.0.0
-* add AsyncApi support (https://www.asyncapi.com/)
+* rename ByteType to BytesType
+
+# 1.4.0
+* introduction of a ByteType
+
+# 1.3.1
+* add new funcs to stringUtils
+* fix enum bug in python template
 
 # 1.3.0
 * add '--flattenInheritance' command line switch

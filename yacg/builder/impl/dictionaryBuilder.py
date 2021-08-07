@@ -12,9 +12,10 @@ import yaml
 from yacg.model.model import Property
 from yacg.util.stringUtils import toUpperCamelCase
 from yacg.model.model import IntegerType, NumberType, BooleanType
-from yacg.model.model import StringType, UuidType
+from yacg.model.model import StringType, UuidType, BytesType
 from yacg.model.model import DateType, DateTimeType
 from yacg.model.model import EnumType, ComplexType, Tag
+from yacg.util.fileUtils import doesFileExist
 
 import yacg.model.openapi as openapi
 
@@ -24,31 +25,41 @@ class ModelFileContainer:
         self.fileName = fileName
         self.parsedSchema = parsedSchema
         self.version = parsedSchema.get('version', None)
-        self.domain = parsedSchema.get('__domain', None)
+        self.domain = parsedSchema.get('x-domain', None)
 
 
-def getParsedSchemaFromJson(modelFile):
+def getParsedSchemaFromJson(model):
     """reads a JSON schema file in json format
     and returns the parsed dictionary from it
 
     Keyword arguments:
-    modelFile -- file name and path to the model to load
+    model -- file name and path to the model to load or model content from stdin
     """
 
-    with open(modelFile) as json_schema:
-        return json.load(json_schema)
+    if doesFileExist(model):
+        # model is treaten as file to input
+        with open(model) as json_schema:
+            return json.load(json_schema)
+    else:
+        # model is treaten as string content to get parsed
+        return json.loads(model)
 
 
-def getParsedSchemaFromYaml(modelFile):
+def getParsedSchemaFromYaml(model):
     """reads a JSON schema file in yaml format
     and returns the parsed dictionary from it
 
     Keyword arguments:
-    modelFile -- file name and path to the model to load
+    model -- file name and path to the model to load or model content from stdin
     """
 
-    with open(modelFile) as json_schema:
-        return yaml.load(json_schema, Loader=yaml.FullLoader)
+    if doesFileExist(model):
+        # model is treaten as file to input
+        with open(model) as json_schema:
+            return yaml.load(json_schema, Loader=yaml.FullLoader)
+    else:
+        # model is treaten as string content to get parsed
+        return yaml.load(model, Loader=yaml.FullLoader)
 
 
 def extractTypes(parsedSchema, modelFile, modelTypes, skipOpenApi=False):
@@ -71,7 +82,7 @@ def extractTypes(parsedSchema, modelFile, modelTypes, skipOpenApi=False):
         description = parsedSchema.get('description', None)
         mainType = _extractObjectType(typeNameStr, schemaProperties, allOfEntry, description, modelTypes, modelFileContainer)
         if len(mainType.tags) == 0:
-            tags = parsedSchema.get('__tags', None)
+            tags = parsedSchema.get('x-tags', None)
             if tags is not None:
                 mainType.tags = _extractTags(tags)
         _markRequiredAttributes(mainType, parsedSchema.get('required', []))
@@ -81,7 +92,7 @@ def extractTypes(parsedSchema, modelFile, modelTypes, skipOpenApi=False):
         typeNameStr = toUpperCamelCase(titleStr)
         mainType = _extractEnumType(typeNameStr, None, enumEntry, modelTypes, modelFileContainer)
         if len(mainType.tags) == 0:
-            tags = parsedSchema.get('__tags', None)
+            tags = parsedSchema.get('x-tags', None)
             if tags is not None:
                 mainType.tags = _extractTags(tags)
     schemaDefinitions = parsedSchema.get('definitions', None)
@@ -132,12 +143,17 @@ def _extractTypeAndRelatedTypes(modelFileContainer, desiredTypeName, modelTypes)
     if (schemaProperties is not None) or (allOfEntry is not None):
         # extract top level type
         titleStr = modelFileContainer.parsedSchema.get('title', None)
+        if titleStr is None:
+            lastSlash = modelFileContainer.fileName.rfind('/')
+            lastDot = modelFileContainer.fileName.rfind('.')
+            lastSlash = lastSlash + 1
+            titleStr = modelFileContainer.fileName[lastSlash: lastDot]
         typeNameStr = toUpperCamelCase(titleStr)
         if typeNameStr == desiredTypeName:
             description = modelFileContainer.parsedSchema.get('description', None)
             type = _extractObjectType(typeNameStr, schemaProperties, allOfEntry, description, modelTypes, modelFileContainer)
             if len(type.tags) == 0:
-                tags = modelFileContainer.parsedSchema.get('__tags', None)
+                tags = modelFileContainer.parsedSchema.get('x-tags', None)
                 if tags is not None:
                     type.tags = _extractTags(tags)
             _markRequiredAttributes(type, modelFileContainer.parsedSchema.get('required', []))
@@ -148,7 +164,7 @@ def _extractTypeAndRelatedTypes(modelFileContainer, desiredTypeName, modelTypes)
         typeNameStr = toUpperCamelCase(titleStr)
         mainType = _extractEnumType(typeNameStr, None, enumEntry, modelTypes, modelFileContainer)
         if len(mainType.tags) == 0:
-            tags = modelFileContainer.parsedSchema.get('__tags', None)
+            tags = modelFileContainer.parsedSchema.get('x-tags', None)
             if tags is not None:
                 mainType.tags = _extractTags(tags)
 
@@ -187,13 +203,13 @@ def _extractDefinitionsTypes(definitions, modelTypes, modelFileContainer, desire
         if enumEntry is not None:
             mainType = _extractEnumType(key, None, enumEntry, modelTypes, modelFileContainer)
             if len(mainType.tags) == 0:
-                tags = modelFileContainer.parsedSchema.get('__tags', None)
+                tags = modelFileContainer.parsedSchema.get('x-tags', None)
                 if tags is not None:
                     mainType.tags = _extractTags(tags)
         else:
             type = _extractObjectType(key, properties, allOfEntry, description, modelTypes, modelFileContainer)
             if len(type.tags) == 0:
-                tags = object.get('__tags', None)
+                tags = object.get('x-tags', None)
                 if tags is not None:
                     type.tags = _extractTags(tags)
             _markRequiredAttributes(type, object.get('required', []))
@@ -292,15 +308,15 @@ def _extractAttributes(type, properties, modelTypes, modelFileContainer):
             if hasattr(newProperty.type, 'exclusiveMaximum'):
                 newProperty.type.exclusiveMaximum = propDict.get('exclusiveMaximum', None)
 
-        newProperty.isKey = propDict.get('__key', False)
-        newProperty.isVisualKey = propDict.get('__visualKey', False)
-        implicitRefEntry = propDict.get('__ref', None)
+        newProperty.isKey = propDict.get('x-key', False)
+        newProperty.isVisualKey = propDict.get('x-visualKey', False)
+        implicitRefEntry = propDict.get('x-ref', None)
         if implicitRefEntry is not None:
             newProperty.foreignKey = _extractReferenceType(implicitRefEntry, modelTypes, modelFileContainer)
-        tags = propDict.get('__tags', None)
+        tags = propDict.get('x-tags', None)
         if tags is not None:
             newProperty.tags = _extractTags(tags)
-        newProperty.ordinal = propDict.get('__ordinal', None)
+        newProperty.ordinal = propDict.get('x-ordinal', None)
 
         type.properties.append(newProperty)
 
@@ -424,9 +440,11 @@ def _extractDesiredTypeNameFromRefEntry(refEntry, fileName, fullPathToFile):
             return None
         titleStr = parsedSchema.get('title', None)
         if titleStr is None:
-            return None
-        else:
-            return toUpperCamelCase(titleStr)
+            lastSlash = fileName.rfind('/')
+            lastSlash = lastSlash + 1
+            lastDot = fileName.rfind('.')
+            titleStr = fileName[lastSlash:lastDot]
+        return toUpperCamelCase(titleStr)
     else:
         lastSlash = refEntry.rfind('/', fileNameLen)
         return refEntry[lastSlash + 1:]
@@ -652,7 +670,7 @@ def _extractComplexType(newTypeName, newProperty, propDict, modelTypes, modelFil
     description = propDict.get('description', None)
     if description is not None:
         newInnerType.description = description
-    tags = propDict.get('__tags', None)
+    tags = propDict.get('x-tags', None)
     if tags is not None:
         newInnerType.tags = _extractTags(tags)
     properties = propDict.get('properties', None)
@@ -706,6 +724,8 @@ def _extractStringType(newTypeName, newProperty, propDict, modelTypes, modelFile
         return DateTimeType()
     elif formatValue == 'uuid':
         return UuidType()
+    elif formatValue == 'byte':
+        return BytesType()
     else:
         # TODO logging
         logging.error(
@@ -767,7 +787,7 @@ def _extractTags(tagArray):
     list
 
     Keyword arguments:
-    tagArray -- dictionary of models '__tags' entry
+    tagArray -- dictionary of models 'x-tags' entry
     """
 
     tags = []
