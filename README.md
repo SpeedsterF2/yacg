@@ -45,7 +45,7 @@ ln -s /bin/pip
 sudo apt-get install python3-venv
 pip install --user pipenv
 
-pipenv --python 3.8
+pipenv --python 3.9.5
 pipenv install
 pipenv shell
 
