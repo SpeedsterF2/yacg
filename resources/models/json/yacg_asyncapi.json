@@ -146,7 +146,75 @@
                 },
                 "responseType": {
                     "description": "covers the responded type in RPC style communication",
-                    "$ref": "#/definitions/ResponseType"
+                    "$ref": "#/definitions/XResponseType"
+                }
+            }
+        },
+        "Message": {
+            "description": "Container that describes the messages are sent",
+            "type": "object",
+            "properties": {
+                "xParameters": {
+                    "description": "models the custom parameters",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/XParameter"
+                    }
+                },
+                "payload": {
+                    "description": "either a basic or a complex type",
+                    "$ref": "./yacg_model_schema.json#/definitions/Type"
+                },
+                "xToken": {
+                    "description": "claims that are expected as part of a attached JWT token",
+                    "$ref": "#/definitions/XTokenContent"
+                }
+            }
+        },
+        "XParameter": {
+            "description": "models the custom parameters",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "type": {
+                    "$ref": "./yacg_model_schema.json#/definitions/Type"
+                }                
+            }
+        },
+        "XTokenContent": {
+            "description": "claim that is expected as part of a attached JWT token",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "type": {
+                    "$ref": "./yacg_model_schema.json#/definitions/Type"
+                }
+            }
+        },
+        "AmqpBinding": {
+            "description": "specific AMQP binding properties",
+            "type": "object",
+            "properties": {
+                "exchangeName": {
+                    "type": "string"
+                },
+                "exchangeType": {
+                    "type": "string",
+                    "enum": ["topic", "fan", "direct", "header"]
+                },
+                "replyTo": {
+                    "type": "string",
+                    "default": "amq.rabbitmq.reply-to"
                 }
             }
         },
@@ -185,7 +253,7 @@
                 }
             }
         },
-        "ResponseType": {
+        "XResponseType": {
             "description": "type that is responded in RPC style communication",
             "type": "object",
             "properties": {

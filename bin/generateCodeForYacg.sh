@@ -44,4 +44,17 @@ if ! pipenv run python3 yacg.py --models \
     exit 1
 fi
 
+echo "create asyncapi model classes ..."
+if ! pipenv run python3 yacg.py --models \
+    resources/models/json/yacg_asyncapi.json \
+    --singleFileTemplates pythonBeans=${scriptPos}/../yacg/model/asyncapi.py \
+                pythonBeansTests=${scriptPos}/../tests/model/test_asyncapi.py \
+                plantUml=${scriptPos}/../docs/puml/yacg_asyncapi.puml \
+    --blackListed yacg.model.model=domain \
+    --templateParameters baseModelDomain=yacg.model.asyncapi \
+                         title="yacg openapi model"; then
+    echo "    ERROR while create asyncapi model classes"
+    exit 1
+fi
+
 popd > /dev/null
