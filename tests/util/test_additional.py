@@ -6,7 +6,7 @@ import yacg.model.modelFuncs as modelFuncs
 
 
 class TestAdditional (unittest.TestCase):
-    def _estFlattenTypes(self):
+    def testFlattenTypes(self):
         modelFile = 'tests/resources/models/json/examples/more_sophisticated_allof.json'
         modelFileExists = os.path.isfile(modelFile)
         self.assertTrue('model file exists: ' + modelFile, modelFileExists)
