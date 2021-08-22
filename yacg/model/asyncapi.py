@@ -4,6 +4,8 @@
 
 from enum import Enum
     # XXX baseModelDomain=yacg.model.asyncapi, domain=yacg.model.asyncapi
+    # XXX baseModelDomain=yacg.model.asyncapi, domain=yacg.model.model
+import yacg.model.model
 
 
 class OperationBase:
@@ -126,7 +128,7 @@ class AmqpBinding:
         self.exchangeType = None
 
         #: specific AMQP binding properties
-        self.replyTo = "amq.rabbitmq.reply-to"
+        self.   yTo = "amq.rabbitmq.reply-to"
 
     @classmethod
     def dictToObject(cls, dict):
@@ -138,7 +140,7 @@ class AmqpBinding:
 
         obj.exchangeType = AmqpBindingExchangeTypeEnum.valueForString(dict.get('exchangeType', None))
 
-        obj.replyTo = dict.get('replyTo', "amq.rabbitmq.reply-to")
+        obj.   yTo = dict.get('   yTo', "amq.rabbitmq.reply-to")
         return obj
 
 
@@ -205,54 +207,12 @@ class XResponseType:
         return obj
 
 
-class AsyncApiDefinition:
-    """ subset of attribs, https://www.asyncapi.com/docs/specifications/v2.0.0#A2SObject
-    """
-
-    def __init__(self):
-
-        #: subset of attribs, https://www.asyncapi.com/docs/specifications/v2.0.0#A2SObject
-        self.info = None
-
-        #: subset of attribs, https://www.asyncapi.com/docs/specifications/v2.0.0#A2SObject
-        self.servers = []
-
-        #: subset of attribs, https://www.asyncapi.com/docs/specifications/v2.0.0#A2SObject
-        self.channels = []
-
-        #: subset of attribs, https://www.asyncapi.com/docs/specifications/v2.0.0#A2SObject
-        self.components = []
-
-    @classmethod
-    def dictToObject(cls, dict):
-        if dict is None:
-            return None
-        obj = cls()
-
-        obj.info = Info.dictToObject(dict.get('info', None))
-
-        arrayServers = dict.get('servers', [])
-        for elemServers in arrayServers:
-            obj.servers.append(
-                Server.dictToObject(elemServers))
-
-        arrayChannels = dict.get('channels', [])
-        for elemChannels in arrayChannels:
-            obj.channels.append(
-                Channel.dictToObject(elemChannels))
-
-        arrayComponents = dict.get('components', [])
-        for elemComponents in arrayComponents:
-            obj.components.append(
-                Server.dictToObject(elemComponents))
-        return obj
-
-
-class Info:
+class AsyncApiInfoType (yacg.model.model.Type):
     """ Subset of the info object attribs: https://www.asyncapi.com/docs/specifications/v2.0.0#infoObject
     """
 
     def __init__(self):
+        super(yacg.model.model.Type, self).__init__()
 
         #: Subset of the info object attribs: https://www.asyncapi.com/docs/specifications/v2.0.0#infoObject
         self.title = None
@@ -277,11 +237,12 @@ class Info:
         return obj
 
 
-class Server:
+class AsyncApiServerType (yacg.model.model.Type):
     """ one entry of the servers section
     """
 
     def __init__(self):
+        super(yacg.model.model.Type, self).__init__()
 
         #: one entry of the servers section
         self.name = None
@@ -316,11 +277,12 @@ class Server:
         return obj
 
 
-class Channel:
+class AsyncApiChannelType (yacg.model.model.Type):
     """ one entry of the channels section
     """
 
     def __init__(self):
+        super(yacg.model.model.Type, self).__init__()
 
         #: one entry of the channels section
         self.key = None

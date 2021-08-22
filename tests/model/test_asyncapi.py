@@ -5,6 +5,7 @@
 import unittest
 
 import yacg.model.asyncapi
+import yacg.model.model
 
 
 class TestYacgOpenapiModel (unittest.TestCase):
@@ -32,20 +33,16 @@ class TestYacgOpenapiModel (unittest.TestCase):
         x = yacg.model.asyncapi.XResponseType()
         self.assertIsNotNone(x)
 
-    def testAsyncApiDefinition(self):
-        x = yacg.model.asyncapi.AsyncApiDefinition()
+    def testAsyncApiInfoType(self):
+        x = yacg.model.asyncapi.AsyncApiInfoType()
         self.assertIsNotNone(x)
 
-    def testInfo(self):
-        x = yacg.model.asyncapi.Info()
+    def testAsyncApiServerType(self):
+        x = yacg.model.asyncapi.AsyncApiServerType()
         self.assertIsNotNone(x)
 
-    def testServer(self):
-        x = yacg.model.asyncapi.Server()
-        self.assertIsNotNone(x)
-
-    def testChannel(self):
-        x = yacg.model.asyncapi.Channel()
+    def testAsyncApiChannelType(self):
+        x = yacg.model.asyncapi.AsyncApiChannelType()
         self.assertIsNotNone(x)
 
     def testPublishDescription(self):

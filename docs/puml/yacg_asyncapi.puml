@@ -32,7 +32,7 @@ note top: Container that describes the messages\nare sent
 class AmqpBinding {
         StringType exchangeName 
         AmqpBindingExchangeTypeEnum exchangeType 
-        StringType replyTo 
+        StringType    yTo 
 }
 
 note top: specific AMQP binding properties
@@ -54,16 +54,7 @@ class XResponseType {
 
 note top: type that is responded in\nRPC style communication
 
-class AsyncApiDefinition {
-        Info info 
-        Server[] servers 
-        Channel[] channels 
-        Server[] components 
-}
-
-note top: subset of attribs, https://www.asyncapi.com/docs/specifications/v2.0.0#A2SObject
-
-class Info {
+class AsyncApiInfoType {
         StringType title 
         StringType version 
         StringType description 
@@ -71,7 +62,8 @@ class Info {
 
 note top: Subset of the info object\nattribs: https://www.asyncapi.com/docs/specifications/v2.0.0#infoObject
 
-class Server {
+AsyncApiInfoType --|> Type
+class AsyncApiServerType {
         StringType name 
         StringType url 
         StringType description 
@@ -81,7 +73,8 @@ class Server {
 
 note top: one entry of the servers\nsection
 
-class Channel {
+AsyncApiServerType --|> Type
+class AsyncApiChannelType {
         StringType key 
         PublishDescription publish 
         SubscribeDescription subscribe 
@@ -89,6 +82,7 @@ class Channel {
 
 note top: one entry of the channels\nsection
 
+AsyncApiChannelType --|> Type
 class PublishDescription {
         Type responseType 
 }
@@ -175,18 +169,11 @@ AmqpSubscriberImplementation  *--  AmqpQueue
 XResponseType  *--  Type        
             
     
-AsyncApiDefinition  *--  Info        
-            
-AsyncApiDefinition "0" *-- "n" Server        
-            
-AsyncApiDefinition "0" *-- "n" Channel        
-            
     
     
-    
-Channel  *--  PublishDescription        
+AsyncApiChannelType  *--  PublishDescription        
             
-Channel  *--  SubscribeDescription        
+AsyncApiChannelType  *--  SubscribeDescription        
             
     
 PublishDescription  *--  Type        
