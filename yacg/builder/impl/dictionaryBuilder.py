@@ -70,6 +70,15 @@ def extractAsyncApiTypes(modelTypes, modelFileContainer):
     parsedSchema -- dictionary with the loaded schema
     modelFile -- file name and path to the model to load
     """
+    pathDict = modelFileContainer.parsedSchema.get('paths', None)
+    if pathDict is None:
+        return
+    for pathKey in pathDict:
+        pathType = openapi.PathType()
+        pathType.pathPattern = pathKey
+        commandDict = pathDict[pathKey]
+        _extractOpenApiCommandsForPath(pathType, commandDict, modelTypes, modelFileContainer)
+        modelTypes.append(pathType)
     pass
 
 

@@ -34,7 +34,6 @@
 from enum import Enum
 % endif
 % for domain in domainList:
-    # XXX baseModelDomain=${baseModelDomain}, domain=${domain}
     % if baseModelDomain != domain:
 import ${domain}
     % endif

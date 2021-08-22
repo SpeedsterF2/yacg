@@ -3,7 +3,6 @@
 # created by yacg (template: pythonBeans.mako v1.0.0)
 
 from enum import Enum
-    # XXX baseModelDomain=yacg.model.model, domain=yacg.model.model
 
 
 class Type:
