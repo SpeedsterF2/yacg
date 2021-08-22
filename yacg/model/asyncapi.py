@@ -137,7 +137,7 @@ class AmqpBinding:
 
         obj.exchangeType = AmqpBindingExchangeTypeEnum.valueForString(dict.get('exchangeType', None))
 
-        obj.replyTo = dict.get('replyTo', amq.rabbitmq.reply-to)
+        obj.replyTo = dict.get('replyTo', "amq.rabbitmq.reply-to")
         return obj
 
 

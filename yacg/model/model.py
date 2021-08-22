@@ -308,7 +308,7 @@ class Tag:
 
         obj.name = dict.get('name', None)
 
-        obj.value = dict.get('value', None)
+        obj.value = dict.get('value', "None")
         return obj
 
 
