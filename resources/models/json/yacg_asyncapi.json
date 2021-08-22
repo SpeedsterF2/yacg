@@ -5,6 +5,45 @@
     "version": "0.0.1",
     "x-domain": "yacg.model.asyncapi",
     "definitions": {
+        "OperationBase": {
+            "type": "object",
+            "properties": {
+                "operationId": {
+                    "type": "string",
+                    "description": "unique identifier for this operation"
+                },
+                "summary": {
+                    "type": "string",
+                    "description": "some words to explain to topic"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "some words to explain to topic"
+                },
+                "parameters": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Parameter"
+                    }
+                },
+                "message": {
+                    "description": "some words to explain to topic",
+                    "$ref": "#/definitions/Message"
+                },
+                "amqpBinding": {
+                    "description": "amqp 0.9.1 related binding parameters",
+                    "$ref": "#/definitions/AmqpBinding"
+                },
+                "amqpSubscriberImplementation": {
+                    "description": "basically AMQP queue attributes, set by the subscriber",
+                    "$ref": "#/definitions/AmqpSubscriberImplementation"
+                },
+                "responseType": {
+                    "description": "covers the responded type in RPC style communication",
+                    "$ref": "#/definitions/XResponseType"
+                }
+            }
+        },
         "AsyncApiDefinition": {
             "description": "subset of attribs, https://www.asyncapi.com/docs/specifications/v2.0.0#A2SObject",
             "type": "object",
@@ -110,45 +149,6 @@
                     "$ref": "#/definitions/OperationBase"
                 }
             ]
-        },
-        "OperationBase": {
-            "type": "object",
-            "properties": {
-                "operationId": {
-                    "type": "string",
-                    "description": "unique identifier for this operation"
-                },
-                "summary": {
-                    "type": "string",
-                    "description": "some words to explain to topic"
-                },
-                "description": {
-                    "type": "string",
-                    "description": "some words to explain to topic"
-                },
-                "parameters": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/Parameter"
-                    }
-                },
-                "message": {
-                    "description": "some words to explain to topic",
-                    "$ref": "#/definitions/Message"
-                },
-                "amqpBinding": {
-                    "description": "amqp 0.9.1 related binding parameters",
-                    "$ref": "#/definitions/AmqpBinding"
-                },
-                "amqpSubscriberImplementation": {
-                    "description": "basically AMQP queue attributes, set by the subscriber",
-                    "$ref": "#/definitions/AmqpSubscriberImplementation"
-                },
-                "responseType": {
-                    "description": "covers the responded type in RPC style communication",
-                    "$ref": "#/definitions/XResponseType"
-                }
-            }
         },
         "Message": {
             "description": "Container that describes the messages are sent",

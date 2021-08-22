@@ -5,6 +5,205 @@
 from enum import Enum
 
 
+class OperationBase:
+    def __init__(self):
+
+        self.operationId = None
+
+        self.summary = None
+
+        self.description = None
+
+        self.parameters = []
+
+        self.message = None
+
+        self.amqpBinding = None
+
+        self.amqpSubscriberImplementation = None
+
+        self.responseType = None
+
+    @classmethod
+    def dictToObject(cls, dict):
+        if dict is None:
+            return None
+        obj = cls()
+
+        obj.operationId = dict.get('operationId', None)
+
+        obj.summary = dict.get('summary', None)
+
+        obj.description = dict.get('description', None)
+
+        arrayParameters = dict.get('parameters', [])
+        for elemParameters in arrayParameters:
+            obj.parameters.append(
+                Parameter.dictToObject(elemParameters))
+
+        obj.message = Message.dictToObject(dict.get('message', None))
+
+        obj.amqpBinding = AmqpBinding.dictToObject(dict.get('amqpBinding', None))
+
+        obj.amqpSubscriberImplementation = AmqpSubscriberImplementation.dictToObject(dict.get('amqpSubscriberImplementation', None))
+
+        obj.responseType = XResponseType.dictToObject(dict.get('responseType', None))
+        return obj
+
+
+class Parameter:
+    """ Parameters contained in the channel key
+    """
+
+    def __init__(self):
+
+        #: Parameters contained in the channel key
+        self.name = None
+
+        #: Parameters contained in the channel key
+        self.description = None
+
+        #: Parameters contained in the channel key
+        self.type = None
+
+    @classmethod
+    def dictToObject(cls, dict):
+        if dict is None:
+            return None
+        obj = cls()
+
+        obj.name = dict.get('name', None)
+
+        obj.description = dict.get('description', None)
+
+        obj.type = yacg.model.model.Type.dictToObject(dict.get('type', None))
+        return obj
+
+
+class Message:
+    """ Container that describes the messages are sent
+    """
+
+    def __init__(self):
+
+        #: Container that describes the messages are sent
+        self.xParameters = []
+
+        #: Container that describes the messages are sent
+        self.payload = None
+
+        #: Container that describes the messages are sent
+        self.xToken = None
+
+    @classmethod
+    def dictToObject(cls, dict):
+        if dict is None:
+            return None
+        obj = cls()
+
+        arrayXParameters = dict.get('xParameters', [])
+        for elemXParameters in arrayXParameters:
+            obj.xParameters.append(
+                XParameter.dictToObject(elemXParameters))
+
+        obj.payload = yacg.model.model.Type.dictToObject(dict.get('payload', None))
+
+        obj.xToken = XTokenContent.dictToObject(dict.get('xToken', None))
+        return obj
+
+
+class AmqpBinding:
+    """ specific AMQP binding properties
+    """
+
+    def __init__(self):
+
+        #: specific AMQP binding properties
+        self.exchangeName = None
+
+        #: specific AMQP binding properties
+        self.exchangeType = None
+
+        #: specific AMQP binding properties
+        self.replyTo = "amq.rabbitmq.reply-to"
+
+    @classmethod
+    def dictToObject(cls, dict):
+        if dict is None:
+            return None
+        obj = cls()
+
+        obj.exchangeName = dict.get('exchangeName', None)
+
+        obj.exchangeType = AmqpBindingExchangeTypeEnum.valueForString(dict.get('exchangeType', None))
+
+        obj.replyTo = dict.get('replyTo', amq.rabbitmq.reply-to)
+        return obj
+
+
+class AmqpSubscriberImplementation:
+    """ AMQP specific subscriber settings
+    """
+
+    def __init__(self):
+
+        #: AMQP specific subscriber settings
+        self.queue = None
+
+    @classmethod
+    def dictToObject(cls, dict):
+        if dict is None:
+            return None
+        obj = cls()
+
+        obj.queue = AmqpQueue.dictToObject(dict.get('queue', None))
+        return obj
+
+
+class XResponseType:
+    """ type that is responded in RPC style communication
+    """
+
+    def __init__(self):
+
+        #: type that is responded in RPC style communication
+        self.description = None
+
+        #: type that is responded in RPC style communication
+        self.isArray = False
+
+        #: type that is responded in RPC style communication
+        self.arrayMinItems = None
+
+        #: type that is responded in RPC style communication
+        self.arrayMaxItems = None
+
+        #: type that is responded in RPC style communication
+        self.arrayUniqueItems = None
+
+        #: type that is responded in RPC style communication
+        self.type = None
+
+    @classmethod
+    def dictToObject(cls, dict):
+        if dict is None:
+            return None
+        obj = cls()
+
+        obj.description = dict.get('description', None)
+
+        obj.isArray = dict.get('isArray', False)
+
+        obj.arrayMinItems = dict.get('arrayMinItems', None)
+
+        obj.arrayMaxItems = dict.get('arrayMaxItems', None)
+
+        obj.arrayUniqueItems = dict.get('arrayUniqueItems', None)
+
+        obj.type = yacg.model.model.Type.dictToObject(dict.get('type', None))
+        return obj
+
+
 class AsyncApiDefinition:
     """ subset of attribs, https://www.asyncapi.com/docs/specifications/v2.0.0#A2SObject
     """
@@ -178,205 +377,6 @@ class SubscribeDescription (OperationBase):
         if dict is None:
             return None
         obj = cls()
-        return obj
-
-
-class OperationBase:
-    def __init__(self):
-
-        self.operationId = None
-
-        self.summary = None
-
-        self.description = None
-
-        self.parameters = []
-
-        self.message = None
-
-        self.amqpBinding = None
-
-        self.amqpSubscriberImplementation = None
-
-        self.responseType = None
-
-    @classmethod
-    def dictToObject(cls, dict):
-        if dict is None:
-            return None
-        obj = cls()
-
-        obj.operationId = dict.get('operationId', None)
-
-        obj.summary = dict.get('summary', None)
-
-        obj.description = dict.get('description', None)
-
-        arrayParameters = dict.get('parameters', [])
-        for elemParameters in arrayParameters:
-            obj.parameters.append(
-                Parameter.dictToObject(elemParameters))
-
-        obj.message = Message.dictToObject(dict.get('message', None))
-
-        obj.amqpBinding = AmqpBinding.dictToObject(dict.get('amqpBinding', None))
-
-        obj.amqpSubscriberImplementation = AmqpSubscriberImplementation.dictToObject(dict.get('amqpSubscriberImplementation', None))
-
-        obj.responseType = XResponseType.dictToObject(dict.get('responseType', None))
-        return obj
-
-
-class Parameter:
-    """ Parameters contained in the channel key
-    """
-
-    def __init__(self):
-
-        #: Parameters contained in the channel key
-        self.name = None
-
-        #: Parameters contained in the channel key
-        self.description = None
-
-        #: Parameters contained in the channel key
-        self.type = None
-
-    @classmethod
-    def dictToObject(cls, dict):
-        if dict is None:
-            return None
-        obj = cls()
-
-        obj.name = dict.get('name', None)
-
-        obj.description = dict.get('description', None)
-
-        obj.type = yacg.model.model.Type.dictToObject(dict.get('type', None))
-        return obj
-
-
-class Message:
-    """ Container that describes the messages are sent
-    """
-
-    def __init__(self):
-
-        #: Container that describes the messages are sent
-        self.xParameters = []
-
-        #: Container that describes the messages are sent
-        self.payload = None
-
-        #: Container that describes the messages are sent
-        self.xToken = None
-
-    @classmethod
-    def dictToObject(cls, dict):
-        if dict is None:
-            return None
-        obj = cls()
-
-        arrayXParameters = dict.get('xParameters', [])
-        for elemXParameters in arrayXParameters:
-            obj.xParameters.append(
-                XParameter.dictToObject(elemXParameters))
-
-        obj.payload = yacg.model.model.Type.dictToObject(dict.get('payload', None))
-
-        obj.xToken = XTokenContent.dictToObject(dict.get('xToken', None))
-        return obj
-
-
-class AmqpBinding:
-    """ specific AMQP binding properties
-    """
-
-    def __init__(self):
-
-        #: specific AMQP binding properties
-        self.exchangeName = None
-
-        #: specific AMQP binding properties
-        self.exchangeType = None
-
-        #: specific AMQP binding properties
-        self.replyTo = amq.rabbitmq.reply-to
-
-    @classmethod
-    def dictToObject(cls, dict):
-        if dict is None:
-            return None
-        obj = cls()
-
-        obj.exchangeName = dict.get('exchangeName', None)
-
-        obj.exchangeType = AmqpBindingExchangeTypeEnum.valueForString(dict.get('exchangeType', None))
-
-        obj.replyTo = dict.get('replyTo', amq.rabbitmq.reply-to)
-        return obj
-
-
-class AmqpSubscriberImplementation:
-    """ AMQP specific subscriber settings
-    """
-
-    def __init__(self):
-
-        #: AMQP specific subscriber settings
-        self.queue = None
-
-    @classmethod
-    def dictToObject(cls, dict):
-        if dict is None:
-            return None
-        obj = cls()
-
-        obj.queue = AmqpQueue.dictToObject(dict.get('queue', None))
-        return obj
-
-
-class XResponseType:
-    """ type that is responded in RPC style communication
-    """
-
-    def __init__(self):
-
-        #: type that is responded in RPC style communication
-        self.description = None
-
-        #: type that is responded in RPC style communication
-        self.isArray = False
-
-        #: type that is responded in RPC style communication
-        self.arrayMinItems = None
-
-        #: type that is responded in RPC style communication
-        self.arrayMaxItems = None
-
-        #: type that is responded in RPC style communication
-        self.arrayUniqueItems = None
-
-        #: type that is responded in RPC style communication
-        self.type = None
-
-    @classmethod
-    def dictToObject(cls, dict):
-        if dict is None:
-            return None
-        obj = cls()
-
-        obj.description = dict.get('description', None)
-
-        obj.isArray = dict.get('isArray', False)
-
-        obj.arrayMinItems = dict.get('arrayMinItems', None)
-
-        obj.arrayMaxItems = dict.get('arrayMaxItems', None)
-
-        obj.arrayUniqueItems = dict.get('arrayUniqueItems', None)
-
-        obj.type = yacg.model.model.Type.dictToObject(dict.get('type', None))
         return obj
 
 

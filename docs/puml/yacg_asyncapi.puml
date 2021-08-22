@@ -1,54 +1,6 @@
 
 @startuml
 
-class AsyncApiDefinition {
-        Info info 
-        Server[] servers 
-        Channel[] channels 
-        Server[] components 
-}
-
-note top: subset of attribs, https://www.asyncapi.com/docs/specifications/v2.0.0#A2SObject
-
-class Info {
-        StringType title 
-        StringType version 
-        StringType description 
-}
-
-note top: Subset of the info object\nattribs: https://www.asyncapi.com/docs/specifications/v2.0.0#infoObject
-
-class Server {
-        StringType name 
-        StringType url 
-        StringType description 
-        StringType protocol 
-        StringType protocolVersion 
-}
-
-note top: one entry of the servers\nsection
-
-class Channel {
-        StringType key 
-        PublishDescription publish 
-        SubscribeDescription subscribe 
-}
-
-note top: one entry of the channels\nsection
-
-class PublishDescription {
-        Type responseType 
-}
-
-note top: Configuration parameter needed for publishing
-
-PublishDescription --|> OperationBase
-class SubscribeDescription {
-}
-
-note top: Configuration parameter needed to subscribe\ndata
-
-SubscribeDescription --|> OperationBase
 class OperationBase {
         StringType operationId 
         StringType summary 
@@ -102,6 +54,54 @@ class XResponseType {
 
 note top: type that is responded in\nRPC style communication
 
+class AsyncApiDefinition {
+        Info info 
+        Server[] servers 
+        Channel[] channels 
+        Server[] components 
+}
+
+note top: subset of attribs, https://www.asyncapi.com/docs/specifications/v2.0.0#A2SObject
+
+class Info {
+        StringType title 
+        StringType version 
+        StringType description 
+}
+
+note top: Subset of the info object\nattribs: https://www.asyncapi.com/docs/specifications/v2.0.0#infoObject
+
+class Server {
+        StringType name 
+        StringType url 
+        StringType description 
+        StringType protocol 
+        StringType protocolVersion 
+}
+
+note top: one entry of the servers\nsection
+
+class Channel {
+        StringType key 
+        PublishDescription publish 
+        SubscribeDescription subscribe 
+}
+
+note top: one entry of the channels\nsection
+
+class PublishDescription {
+        Type responseType 
+}
+
+note top: Configuration parameter needed for publishing
+
+PublishDescription --|> OperationBase
+class SubscribeDescription {
+}
+
+note top: Configuration parameter needed to subscribe\ndata
+
+SubscribeDescription --|> OperationBase
 class XParameter {
         StringType name 
         StringType description 
@@ -145,24 +145,6 @@ enum AmqpQueueTypeEnum {
 
 
     
-AsyncApiDefinition  *--  Info        
-            
-AsyncApiDefinition "0" *-- "n" Server        
-            
-AsyncApiDefinition "0" *-- "n" Channel        
-            
-    
-    
-    
-Channel  *--  PublishDescription        
-            
-Channel  *--  SubscribeDescription        
-            
-    
-PublishDescription  *--  Type        
-            
-    
-    
 OperationBase "0" *-- "n" Parameter        
             
 OperationBase  *--  Message        
@@ -192,6 +174,24 @@ AmqpSubscriberImplementation  *--  AmqpQueue
     
 XResponseType  *--  Type        
             
+    
+AsyncApiDefinition  *--  Info        
+            
+AsyncApiDefinition "0" *-- "n" Server        
+            
+AsyncApiDefinition "0" *-- "n" Channel        
+            
+    
+    
+    
+Channel  *--  PublishDescription        
+            
+Channel  *--  SubscribeDescription        
+            
+    
+PublishDescription  *--  Type        
+            
+    
     
 XParameter  *--  Type        
             

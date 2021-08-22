@@ -8,30 +8,6 @@ import yacg.model.asyncapi
 
 
 class TestYacgOpenapiModel (unittest.TestCase):
-    def testAsyncApiDefinition(self):
-        x = yacg.model.asyncapi.AsyncApiDefinition()
-        self.assertIsNotNone(x)
-
-    def testInfo(self):
-        x = yacg.model.asyncapi.Info()
-        self.assertIsNotNone(x)
-
-    def testServer(self):
-        x = yacg.model.asyncapi.Server()
-        self.assertIsNotNone(x)
-
-    def testChannel(self):
-        x = yacg.model.asyncapi.Channel()
-        self.assertIsNotNone(x)
-
-    def testPublishDescription(self):
-        x = yacg.model.asyncapi.PublishDescription()
-        self.assertIsNotNone(x)
-
-    def testSubscribeDescription(self):
-        x = yacg.model.asyncapi.SubscribeDescription()
-        self.assertIsNotNone(x)
-
     def testOperationBase(self):
         x = yacg.model.asyncapi.OperationBase()
         self.assertIsNotNone(x)
@@ -54,6 +30,30 @@ class TestYacgOpenapiModel (unittest.TestCase):
 
     def testXResponseType(self):
         x = yacg.model.asyncapi.XResponseType()
+        self.assertIsNotNone(x)
+
+    def testAsyncApiDefinition(self):
+        x = yacg.model.asyncapi.AsyncApiDefinition()
+        self.assertIsNotNone(x)
+
+    def testInfo(self):
+        x = yacg.model.asyncapi.Info()
+        self.assertIsNotNone(x)
+
+    def testServer(self):
+        x = yacg.model.asyncapi.Server()
+        self.assertIsNotNone(x)
+
+    def testChannel(self):
+        x = yacg.model.asyncapi.Channel()
+        self.assertIsNotNone(x)
+
+    def testPublishDescription(self):
+        x = yacg.model.asyncapi.PublishDescription()
+        self.assertIsNotNone(x)
+
+    def testSubscribeDescription(self):
+        x = yacg.model.asyncapi.SubscribeDescription()
         self.assertIsNotNone(x)
 
     def testXParameter(self):
