@@ -3,7 +3,7 @@
 # created by yacg (template: pythonBeans.mako v1.0.0)
 
 from enum import Enum
-import yacg.model.model
+    # XXX baseModelDomain=yacg.model.asyncapi, domain=yacg.model.asyncapi
 
 
 class OperationBase:

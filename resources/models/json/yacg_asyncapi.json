@@ -44,84 +44,78 @@
                 }
             }
         },
-        "AsyncApiDefinition": {
-            "description": "subset of attribs, https://www.asyncapi.com/docs/specifications/v2.0.0#A2SObject",
-            "type": "object",
-            "properties": {
-                "info": {
-                    "$ref": "#/definitions/Info"
-                },
-                "servers": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/Server"
-                    }
-                },
-                "channels": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/Channel"
-                    }
-                },
-                "components": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/Server"
-                    }
-                }
-            }
-        },
-        "Info": {
+        "AsyncApiInfoType": {
             "description": "Subset of the info object attribs: https://www.asyncapi.com/docs/specifications/v2.0.0#infoObject",
             "type": "object",
-            "properties": {
-                "title": {
-                    "type": "string"
+            "allOf": [
+                { 
+                    "$ref": "yacg_model_schema.json#/definitions/Type" 
                 },
-                "version": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
+                {
+                    "properties": {
+                        "title": {
+                            "type": "string"
+                        },
+                        "version": {
+                            "type": "string"
+                        },
+                        "description": {
+                            "type": "string"
+                        }
+                    }
                 }
-            }
+            ]  
         },
-        "Server": {
+        "AsyncApiServerType": {
             "description": "one entry of the servers section",
             "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string"
+            "allOf": [
+                { 
+                    "$ref": "yacg_model_schema.json#/definitions/Type" 
                 },
-                "url": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "protocol": {
-                    "type": "string"
-                },
-                "protocolVersion": {
-                    "type": "string"
+                {
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        },
+                        "url": {
+                            "type": "string"
+                        },
+                        "description": {
+                            "type": "string"
+                        },
+                        "protocol": {
+                            "type": "string"
+                        },
+                        "protocolVersion": {
+                            "type": "string"
+                        }
+                    }            
                 }
-            }            
+            ]  
         },
-        "Channel": {
+        "AsyncApiChannelType": {
             "description": "one entry of the channels section",
             "type": "object",            
-            "properties": {
-                "key": {
-                    "type": "string"
+            "allOf": [
+                { 
+                    "$ref": "yacg_model_schema.json#/definitions/Type" 
                 },
-                "publish": {
-                    "$ref": "#/definitions/PublishDescription"
-                },
-                "subscribe": {
-                    "$ref": "#/definitions/SubscribeDescription"
+                {
+                    "properties": {
+                        "key": {
+                            "type": "string"
+                        },
+                        "publish": {
+                            "$ref": "#/definitions/PublishDescription"
+                        },
+                        "subscribe": {
+                            "$ref": "#/definitions/SubscribeDescription"
+                        }
+                        
+                    }
                 }
-                
-            }
+            ]  
         },
         "PublishDescription": {
             "description": "Configuration parameter needed for publishing",
@@ -212,7 +206,7 @@
                     "type": "string",
                     "enum": ["topic", "fan", "direct", "header"]
                 },
-                "replyTo": {
+                "   yTo": {
                     "type": "string",
                     "default": "amq.rabbitmq.reply-to"
                 }
