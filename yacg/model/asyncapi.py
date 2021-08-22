@@ -3,6 +3,7 @@
 # created by yacg (template: pythonBeans.mako v1.0.0)
 
 from enum import Enum
+import yacg.model.model
 
 
 class OperationBase:

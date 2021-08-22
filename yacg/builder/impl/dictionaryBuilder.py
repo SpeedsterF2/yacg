@@ -62,6 +62,24 @@ def getParsedSchemaFromYaml(model):
         return yaml.load(model, Loader=yaml.FullLoader)
 
 
+def extractAsyncApiTypes(parsedSchema, modelFile, modelTypes):
+    """extract the types from the parsed schema
+
+
+    Keyword arguments:
+    parsedSchema -- dictionary with the loaded schema
+    modelFile -- file name and path to the model to load
+    """
+
+    modelFileContainer = ModelFileContainer(modelFile, parsedSchema)
+    components = parsedSchema.get('components', None)
+    if components is not None:
+        schemas = components.get('schemas', None)
+        if schemas is not None:
+            # extract types from extra components section (OpenApi v3)
+            _extractDefinitionsTypes(schemas, modelTypes, modelFileContainer, None)
+
+
 def extractTypes(parsedSchema, modelFile, modelTypes, skipOpenApi=False):
     """extract the types from the parsed schema
 
