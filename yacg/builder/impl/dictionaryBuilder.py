@@ -62,25 +62,18 @@ def getParsedSchemaFromYaml(model):
         return yaml.load(model, Loader=yaml.FullLoader)
 
 
-def extractAsyncApiTypes(parsedSchema, modelFile, modelTypes):
-    """extract the types from the parsed schema
+def extractAsyncApiTypes(modelTypes, modelFileContainer):
+    """extract the asyncapi specific types from the parsed schema
 
 
     Keyword arguments:
     parsedSchema -- dictionary with the loaded schema
     modelFile -- file name and path to the model to load
     """
-
-    modelFileContainer = ModelFileContainer(modelFile, parsedSchema)
-    components = parsedSchema.get('components', None)
-    if components is not None:
-        schemas = components.get('schemas', None)
-        if schemas is not None:
-            # extract types from extra components section (OpenApi v3)
-            _extractDefinitionsTypes(schemas, modelTypes, modelFileContainer, None)
+    pass
 
 
-def extractTypes(parsedSchema, modelFile, modelTypes, skipOpenApi=False):
+def extractTypes(parsedSchema, modelFile, modelTypes, skipOpenApi=False, skipAsyncApi=False):
     """extract the types from the parsed schema
 
 
@@ -118,11 +111,11 @@ def extractTypes(parsedSchema, modelFile, modelTypes, skipOpenApi=False):
         # extract types from extra definitions section
         _extractDefinitionsTypes(schemaDefinitions, modelTypes, modelFileContainer, None)
     else:
-        openApiComponents = parsedSchema.get('components', None)
-        if openApiComponents is not None:
-            schemas = openApiComponents.get('schemas', None)
+        components = parsedSchema.get('components', None)
+        if components is not None:
+            schemas = components.get('schemas', None)
             if schemas is not None:
-                # extract types from extra components section (OpenApi v3)
+                # extract types from extra components section (OpenApi v3, AsyncApi)
                 _extractDefinitionsTypes(schemas, modelTypes, modelFileContainer, None)
 
     # there could be situations with circular type dependencies where are some
@@ -145,6 +138,10 @@ def extractTypes(parsedSchema, modelFile, modelTypes, skipOpenApi=False):
         if (parsedSchema.get('openapi', None) is not None) or (parsedSchema.get('swagger', None) is not None):
             modelFileContainer = ModelFileContainer(modelFile, parsedSchema)
             extractOpenApiPathTypes(modelTypes, modelFileContainer)
+    if not skipAsyncApi:
+        if (parsedSchema.get('openapi', None) is not None) or (parsedSchema.get('swagger', None) is not None):
+            modelFileContainer = ModelFileContainer(modelFile, parsedSchema)
+            extractAsyncApiTypes(modelTypes, modelFileContainer)
     return modelTypes
 
 
