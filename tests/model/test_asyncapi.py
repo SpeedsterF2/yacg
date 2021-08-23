@@ -13,10 +13,6 @@ class TestYacgOpenapiModel (unittest.TestCase):
         x = yacg.model.asyncapi.OperationBase()
         self.assertIsNotNone(x)
 
-    def testParameter(self):
-        x = yacg.model.asyncapi.Parameter()
-        self.assertIsNotNone(x)
-
     def testMessage(self):
         x = yacg.model.asyncapi.Message()
         self.assertIsNotNone(x)
@@ -47,6 +43,10 @@ class TestYacgOpenapiModel (unittest.TestCase):
 
     def testAsyncApiChannelType(self):
         x = yacg.model.asyncapi.AsyncApiChannelType()
+        self.assertIsNotNone(x)
+
+    def testParameter(self):
+        x = yacg.model.asyncapi.Parameter()
         self.assertIsNotNone(x)
 
     def testPublishDescription(self):

@@ -5,21 +5,12 @@ class OperationBase {
         StringType operationId 
         StringType summary 
         StringType description 
-        Parameter[] parameters 
         Message message 
         AmqpBinding amqpBinding 
         AmqpSubscriberImplementation amqpSubscriberImplementation 
         XResponseType responseType 
 }
 
-
-class Parameter {
-        StringType name 
-        StringType description 
-        Type type 
-}
-
-note top: Parameters contained in the channel\nkey
 
 class Message {
         XParameter[] xParameters 
@@ -82,6 +73,8 @@ note top: one entry of the servers\nsection
 AsyncApiServerType --|> AsyncApiType
 class AsyncApiChannelType {
         StringType key 
+        StringType description 
+        Parameter[] parameters 
         PublishDescription publish 
         SubscribeDescription subscribe 
 }
@@ -89,6 +82,14 @@ class AsyncApiChannelType {
 note top: one entry of the channels\nsection
 
 AsyncApiChannelType --|> AsyncApiType
+class Parameter {
+        StringType name 
+        StringType description 
+        Type type 
+}
+
+note top: Parameters contained in the channel\nkey
+
 class PublishDescription {
         Type responseType 
 }
@@ -145,8 +146,6 @@ enum AmqpQueueTypeEnum {
 
 
     
-OperationBase "0" *-- "n" Parameter        
-            
 OperationBase  *--  Message        
             
 OperationBase  *--  AmqpBinding        
@@ -154,9 +153,6 @@ OperationBase  *--  AmqpBinding
 OperationBase  *--  AmqpSubscriberImplementation        
             
 OperationBase  *--  XResponseType        
-            
-    
-Parameter  *--  Type        
             
     
 Message "0" *-- "n" XParameter        
@@ -178,9 +174,14 @@ XResponseType  *--  Type
     
     
     
+AsyncApiChannelType "0" *-- "n" Parameter        
+            
 AsyncApiChannelType  *--  PublishDescription        
             
 AsyncApiChannelType  *--  SubscribeDescription        
+            
+    
+Parameter  *--  Type        
             
     
 PublishDescription  *--  Type        

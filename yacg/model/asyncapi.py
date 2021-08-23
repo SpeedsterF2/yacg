@@ -15,8 +15,6 @@ class OperationBase:
 
         self.description = None
 
-        self.parameters = []
-
         self.message = None
 
         self.amqpBinding = None
@@ -37,11 +35,6 @@ class OperationBase:
 
         obj.description = dict.get('description', None)
 
-        arrayParameters = dict.get('parameters', [])
-        for elemParameters in arrayParameters:
-            obj.parameters.append(
-                Parameter.dictToObject(elemParameters))
-
         obj.message = Message.dictToObject(dict.get('message', None))
 
         obj.amqpBinding = AmqpBinding.dictToObject(dict.get('amqpBinding', None))
@@ -49,35 +42,6 @@ class OperationBase:
         obj.amqpSubscriberImplementation = AmqpSubscriberImplementation.dictToObject(dict.get('amqpSubscriberImplementation', None))
 
         obj.responseType = XResponseType.dictToObject(dict.get('responseType', None))
-        return obj
-
-
-class Parameter:
-    """ Parameters contained in the channel key
-    """
-
-    def __init__(self):
-
-        #: Parameters contained in the channel key
-        self.name = None
-
-        #: Parameters contained in the channel key
-        self.description = None
-
-        #: Parameters contained in the channel key
-        self.type = None
-
-    @classmethod
-    def dictToObject(cls, dict):
-        if dict is None:
-            return None
-        obj = cls()
-
-        obj.name = dict.get('name', None)
-
-        obj.description = dict.get('description', None)
-
-        obj.type = yacg.model.model.Type.dictToObject(dict.get('type', None))
         return obj
 
 
@@ -205,12 +169,28 @@ class XResponseType:
         return obj
 
 
-class AsyncApiInfoType (yacg.model.model.Type):
-    """ Subset of the info object attribs: https://www.asyncapi.com/docs/specifications/v2.0.0#infoObject
+class AsyncApiType (yacg.model.model.Type):
+    """ Base type to identify AsyncApi types
     """
 
     def __init__(self):
         super(yacg.model.model.Type, self).__init__()
+        pass
+
+    @classmethod
+    def dictToObject(cls, dict):
+        if dict is None:
+            return None
+        obj = cls()
+        return obj
+
+
+class AsyncApiInfoType (AsyncApiType):
+    """ Subset of the info object attribs: https://www.asyncapi.com/docs/specifications/v2.0.0#infoObject
+    """
+
+    def __init__(self):
+        super(AsyncApiType, self).__init__()
 
         #: Subset of the info object attribs: https://www.asyncapi.com/docs/specifications/v2.0.0#infoObject
         self.title = None
@@ -235,12 +215,12 @@ class AsyncApiInfoType (yacg.model.model.Type):
         return obj
 
 
-class AsyncApiServerType (yacg.model.model.Type):
+class AsyncApiServerType (AsyncApiType):
     """ one entry of the servers section
     """
 
     def __init__(self):
-        super(yacg.model.model.Type, self).__init__()
+        super(AsyncApiType, self).__init__()
 
         #: one entry of the servers section
         self.name = None
@@ -275,15 +255,21 @@ class AsyncApiServerType (yacg.model.model.Type):
         return obj
 
 
-class AsyncApiChannelType (yacg.model.model.Type):
+class AsyncApiChannelType (AsyncApiType):
     """ one entry of the channels section
     """
 
     def __init__(self):
-        super(yacg.model.model.Type, self).__init__()
+        super(AsyncApiType, self).__init__()
 
         #: one entry of the channels section
         self.key = None
+
+        #: one entry of the channels section
+        self.description = None
+
+        #: one entry of the channels section
+        self.parameters = []
 
         #: one entry of the channels section
         self.publish = None
@@ -299,9 +285,45 @@ class AsyncApiChannelType (yacg.model.model.Type):
 
         obj.key = dict.get('key', None)
 
+        obj.description = dict.get('description', None)
+
+        arrayParameters = dict.get('parameters', [])
+        for elemParameters in arrayParameters:
+            obj.parameters.append(
+                Parameter.dictToObject(elemParameters))
+
         obj.publish = PublishDescription.dictToObject(dict.get('publish', None))
 
         obj.subscribe = SubscribeDescription.dictToObject(dict.get('subscribe', None))
+        return obj
+
+
+class Parameter:
+    """ Parameters contained in the channel key
+    """
+
+    def __init__(self):
+
+        #: Parameters contained in the channel key
+        self.name = None
+
+        #: Parameters contained in the channel key
+        self.description = None
+
+        #: Parameters contained in the channel key
+        self.type = None
+
+    @classmethod
+    def dictToObject(cls, dict):
+        if dict is None:
+            return None
+        obj = cls()
+
+        obj.name = dict.get('name', None)
+
+        obj.description = dict.get('description', None)
+
+        obj.type = yacg.model.model.Type.dictToObject(dict.get('type', None))
         return obj
 
 
