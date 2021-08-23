@@ -19,10 +19,6 @@ class OperationBase:
 
         self.amqpBinding = None
 
-        self.amqpSubscriberImplementation = None
-
-        self.responseType = None
-
     @classmethod
     def dictToObject(cls, dict):
         if dict is None:
@@ -38,10 +34,6 @@ class OperationBase:
         obj.message = Message.dictToObject(dict.get('message', None))
 
         obj.amqpBinding = AmqpBinding.dictToObject(dict.get('amqpBinding', None))
-
-        obj.amqpSubscriberImplementation = AmqpSubscriberImplementation.dictToObject(dict.get('amqpSubscriberImplementation', None))
-
-        obj.responseType = XResponseType.dictToObject(dict.get('responseType', None))
         return obj
 
 
@@ -103,69 +95,6 @@ class AmqpBinding:
         obj.exchangeType = AmqpBindingExchangeTypeEnum.valueForString(dict.get('exchangeType', None))
 
         obj.   yTo = dict.get('   yTo', "amq.rabbitmq.reply-to")
-        return obj
-
-
-class AmqpSubscriberImplementation:
-    """ AMQP specific subscriber settings
-    """
-
-    def __init__(self):
-
-        #: AMQP specific subscriber settings
-        self.queue = None
-
-    @classmethod
-    def dictToObject(cls, dict):
-        if dict is None:
-            return None
-        obj = cls()
-
-        obj.queue = AmqpQueue.dictToObject(dict.get('queue', None))
-        return obj
-
-
-class XResponseType:
-    """ type that is responded in RPC style communication
-    """
-
-    def __init__(self):
-
-        #: type that is responded in RPC style communication
-        self.description = None
-
-        #: type that is responded in RPC style communication
-        self.isArray = False
-
-        #: type that is responded in RPC style communication
-        self.arrayMinItems = None
-
-        #: type that is responded in RPC style communication
-        self.arrayMaxItems = None
-
-        #: type that is responded in RPC style communication
-        self.arrayUniqueItems = None
-
-        #: type that is responded in RPC style communication
-        self.type = None
-
-    @classmethod
-    def dictToObject(cls, dict):
-        if dict is None:
-            return None
-        obj = cls()
-
-        obj.description = dict.get('description', None)
-
-        obj.isArray = dict.get('isArray', False)
-
-        obj.arrayMinItems = dict.get('arrayMinItems', None)
-
-        obj.arrayMaxItems = dict.get('arrayMaxItems', None)
-
-        obj.arrayUniqueItems = dict.get('arrayUniqueItems', None)
-
-        obj.type = yacg.model.model.Type.dictToObject(dict.get('type', None))
         return obj
 
 
@@ -335,6 +264,9 @@ class PublishDescription (OperationBase):
         super(OperationBase, self).__init__()
 
         #: Configuration parameter needed for publishing
+        self.amqpSubscriberImplementation = None
+
+        #: Configuration parameter needed for publishing
         self.responseType = None
 
     @classmethod
@@ -343,7 +275,9 @@ class PublishDescription (OperationBase):
             return None
         obj = cls()
 
-        obj.responseType = yacg.model.model.Type.dictToObject(dict.get('responseType', None))
+        obj.amqpSubscriberImplementation = AmqpSubscriberImplementation.dictToObject(dict.get('amqpSubscriberImplementation', None))
+
+        obj.responseType = XResponseType.dictToObject(dict.get('responseType', None))
         return obj
 
 
@@ -360,6 +294,69 @@ class SubscribeDescription (OperationBase):
         if dict is None:
             return None
         obj = cls()
+        return obj
+
+
+class AmqpSubscriberImplementation:
+    """ AMQP specific subscriber settings
+    """
+
+    def __init__(self):
+
+        #: AMQP specific subscriber settings
+        self.queue = None
+
+    @classmethod
+    def dictToObject(cls, dict):
+        if dict is None:
+            return None
+        obj = cls()
+
+        obj.queue = AmqpQueue.dictToObject(dict.get('queue', None))
+        return obj
+
+
+class XResponseType:
+    """ type that is responded in RPC style communication
+    """
+
+    def __init__(self):
+
+        #: type that is responded in RPC style communication
+        self.description = None
+
+        #: type that is responded in RPC style communication
+        self.isArray = False
+
+        #: type that is responded in RPC style communication
+        self.arrayMinItems = None
+
+        #: type that is responded in RPC style communication
+        self.arrayMaxItems = None
+
+        #: type that is responded in RPC style communication
+        self.arrayUniqueItems = None
+
+        #: type that is responded in RPC style communication
+        self.type = None
+
+    @classmethod
+    def dictToObject(cls, dict):
+        if dict is None:
+            return None
+        obj = cls()
+
+        obj.description = dict.get('description', None)
+
+        obj.isArray = dict.get('isArray', False)
+
+        obj.arrayMinItems = dict.get('arrayMinItems', None)
+
+        obj.arrayMaxItems = dict.get('arrayMaxItems', None)
+
+        obj.arrayUniqueItems = dict.get('arrayUniqueItems', None)
+
+        obj.type = yacg.model.model.Type.dictToObject(dict.get('type', None))
         return obj
 
 

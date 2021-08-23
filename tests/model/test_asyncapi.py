@@ -21,14 +21,6 @@ class TestYacgOpenapiModel (unittest.TestCase):
         x = yacg.model.asyncapi.AmqpBinding()
         self.assertIsNotNone(x)
 
-    def testAmqpSubscriberImplementation(self):
-        x = yacg.model.asyncapi.AmqpSubscriberImplementation()
-        self.assertIsNotNone(x)
-
-    def testXResponseType(self):
-        x = yacg.model.asyncapi.XResponseType()
-        self.assertIsNotNone(x)
-
     def testAsyncApiType(self):
         x = yacg.model.asyncapi.AsyncApiType()
         self.assertIsNotNone(x)
@@ -55,6 +47,14 @@ class TestYacgOpenapiModel (unittest.TestCase):
 
     def testSubscribeDescription(self):
         x = yacg.model.asyncapi.SubscribeDescription()
+        self.assertIsNotNone(x)
+
+    def testAmqpSubscriberImplementation(self):
+        x = yacg.model.asyncapi.AmqpSubscriberImplementation()
+        self.assertIsNotNone(x)
+
+    def testXResponseType(self):
+        x = yacg.model.asyncapi.XResponseType()
         self.assertIsNotNone(x)
 
     def testXParameter(self):

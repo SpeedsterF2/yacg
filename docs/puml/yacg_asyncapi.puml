@@ -7,8 +7,6 @@ class OperationBase {
         StringType description 
         Message message 
         AmqpBinding amqpBinding 
-        AmqpSubscriberImplementation amqpSubscriberImplementation 
-        XResponseType responseType 
 }
 
 
@@ -27,23 +25,6 @@ class AmqpBinding {
 }
 
 note top: specific AMQP binding properties
-
-class AmqpSubscriberImplementation {
-        AmqpQueue queue 
-}
-
-note top: AMQP specific subscriber settings
-
-class XResponseType {
-        StringType description 
-        BooleanType isArray 
-        IntegerType arrayMinItems 
-        IntegerType arrayMaxItems 
-        BooleanType arrayUniqueItems 
-        Type type 
-}
-
-note top: type that is responded in\nRPC style communication
 
 class AsyncApiType {
 }
@@ -91,7 +72,8 @@ class Parameter {
 note top: Parameters contained in the channel\nkey
 
 class PublishDescription {
-        Type responseType 
+        AmqpSubscriberImplementation amqpSubscriberImplementation 
+        XResponseType responseType 
 }
 
 note top: Configuration parameter needed for publishing
@@ -103,6 +85,23 @@ class SubscribeDescription {
 note top: Configuration parameter needed to subscribe\ndata
 
 SubscribeDescription --|> OperationBase
+class AmqpSubscriberImplementation {
+        AmqpQueue queue 
+}
+
+note top: AMQP specific subscriber settings
+
+class XResponseType {
+        StringType description 
+        BooleanType isArray 
+        IntegerType arrayMinItems 
+        IntegerType arrayMaxItems 
+        BooleanType arrayUniqueItems 
+        Type type 
+}
+
+note top: type that is responded in\nRPC style communication
+
 class XParameter {
         StringType name 
         StringType description 
@@ -150,10 +149,6 @@ OperationBase  *--  Message
             
 OperationBase  *--  AmqpBinding        
             
-OperationBase  *--  AmqpSubscriberImplementation        
-            
-OperationBase  *--  XResponseType        
-            
     
 Message "0" *-- "n" XParameter        
             
@@ -163,12 +158,6 @@ Message  *--  XTokenContent
             
     
 AmqpBinding  *--  AmqpBindingExchangeTypeEnum        
-            
-    
-AmqpSubscriberImplementation  *--  AmqpQueue        
-            
-    
-XResponseType  *--  Type        
             
     
     
@@ -184,9 +173,17 @@ AsyncApiChannelType  *--  SubscribeDescription
 Parameter  *--  Type        
             
     
-PublishDescription  *--  Type        
+PublishDescription  *--  AmqpSubscriberImplementation        
+            
+PublishDescription  *--  XResponseType        
             
     
+    
+AmqpSubscriberImplementation  *--  AmqpQueue        
+            
+    
+XResponseType  *--  Type        
+            
     
 XParameter  *--  Type        
             

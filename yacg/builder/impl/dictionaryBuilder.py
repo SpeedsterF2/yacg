@@ -107,13 +107,39 @@ def _parseAsyncApiChannelParameters(modelTypes, channelDict, channelType, modelF
         channelType.parameters.append(paramType)
 
 
-def _parseAsyncApiChannelPublish(modelTypes, channelDict, channelType, modelFileContainer):
+def _initAsyncApiOperationBase(operationDict, operationType):
+    operationType.operationId = operationDict.get('operationId', None)
+    operationType.summary = operationDict.get('summary', None)
+    operationType.description = operationDict.get('description', None)
+    _initAsyncApiMessage(operationDict, operationType)
+    _initAsyncApiAmqpBinding(operationDict, operationType)
+
+
+def _initAsyncApiMessage(operationDict, operationType):
     pass
+    # self.message = None
+    # TODO
+
+def _initAsyncApiAmqpBinding(operationDict, operationType):
+    pass
+    # self.amqpBinding = None
+    # TODO
+
+def _parseAsyncApiChannelPublish(modelTypes, channelDict, channelType, modelFileContainer):
+    operationDict = channelDict.get('publish', None)
+    if operationDict is None:
+        return
+    publishType = asyncapi.PublishDescription()
+    _initAsyncApiOperationBase(operationDict, publishType)
     # TODO
 
 
 def _parseAsyncApiChannelSubscribe(modelTypes, channelDict, channelType, modelFileContainer):
-    pass
+    operationDict = channelDict.get('publish', None)
+    if operationDict is None:
+        return
+    subscribeType = asyncapi.SubscribeDescription()
+    _initAsyncApiOperationBase(operationDict, subscribeType)
     # TODO
 
 
