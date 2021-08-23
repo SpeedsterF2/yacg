@@ -20,12 +20,6 @@
                     "type": "string",
                     "description": "some words to explain to topic"
                 },
-                "parameters": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/Parameter"
-                    }
-                },
                 "message": {
                     "description": "some words to explain to topic",
                     "$ref": "#/definitions/Message"
@@ -44,12 +38,21 @@
                 }
             }
         },
+        "AsyncApiType": {
+            "description": "Base type to identify AsyncApi types",
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "yacg_model_schema.json#/definitions/Type"
+                }
+            ]
+        },
         "AsyncApiInfoType": {
             "description": "Subset of the info object attribs: https://www.asyncapi.com/docs/specifications/v2.0.0#infoObject",
             "type": "object",
             "allOf": [
-                { 
-                    "$ref": "yacg_model_schema.json#/definitions/Type" 
+                {
+                    "$ref": "#/definitions/AsyncApiType"
                 },
                 {
                     "properties": {
@@ -64,14 +67,14 @@
                         }
                     }
                 }
-            ]  
+            ]
         },
         "AsyncApiServerType": {
             "description": "one entry of the servers section",
             "type": "object",
             "allOf": [
-                { 
-                    "$ref": "yacg_model_schema.json#/definitions/Type" 
+                {
+                    "$ref": "#/definitions/AsyncApiType"
                 },
                 {
                     "properties": {
@@ -90,21 +93,30 @@
                         "protocolVersion": {
                             "type": "string"
                         }
-                    }            
+                    }
                 }
-            ]  
+            ]
         },
         "AsyncApiChannelType": {
             "description": "one entry of the channels section",
-            "type": "object",            
+            "type": "object",
             "allOf": [
-                { 
-                    "$ref": "yacg_model_schema.json#/definitions/Type" 
+                {
+                    "$ref": "#/definitions/AsyncApiType"
                 },
                 {
                     "properties": {
                         "key": {
                             "type": "string"
+                        },
+                        "description": {
+                            "type": "string"
+                        },
+                        "parameters": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Parameter"
+                            }
                         },
                         "publish": {
                             "$ref": "#/definitions/PublishDescription"
@@ -112,10 +124,9 @@
                         "subscribe": {
                             "$ref": "#/definitions/SubscribeDescription"
                         }
-                        
                     }
                 }
-            ]  
+            ]
         },
         "PublishDescription": {
             "description": "Configuration parameter needed for publishing",
@@ -131,7 +142,7 @@
                             "description": "type that is received in response",
                             "$ref": "./yacg_model_schema.json#/definitions/Type"
                         }
-                    }        
+                    }
                 }
             ]
         },
@@ -177,7 +188,7 @@
                 },
                 "type": {
                     "$ref": "./yacg_model_schema.json#/definitions/Type"
-                }                
+                }
             }
         },
         "XTokenContent": {
@@ -204,7 +215,12 @@
                 },
                 "exchangeType": {
                     "type": "string",
-                    "enum": ["topic", "fan", "direct", "header"]
+                    "enum": [
+                        "topic",
+                        "fan",
+                        "direct",
+                        "header"
+                    ]
                 },
                 "   yTo": {
                     "type": "string",
@@ -230,7 +246,10 @@
                 },
                 "type": {
                     "type": "string",
-                    "enum": ["quorum", "classic"]
+                    "enum": [
+                        "quorum",
+                        "classic"
+                    ]
                 },
                 "durable": {
                     "type": "boolean"

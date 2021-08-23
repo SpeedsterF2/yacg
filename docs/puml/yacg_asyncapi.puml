@@ -54,6 +54,12 @@ class XResponseType {
 
 note top: type that is responded in\nRPC style communication
 
+class AsyncApiType {
+}
+
+note top: Base type to identify AsyncApi\ntypes
+
+AsyncApiType --|> Type
 class AsyncApiInfoType {
         StringType title 
         StringType version 
@@ -62,7 +68,7 @@ class AsyncApiInfoType {
 
 note top: Subset of the info object\nattribs: https://www.asyncapi.com/docs/specifications/v2.0.0#infoObject
 
-AsyncApiInfoType --|> Type
+AsyncApiInfoType --|> AsyncApiType
 class AsyncApiServerType {
         StringType name 
         StringType url 
@@ -73,7 +79,7 @@ class AsyncApiServerType {
 
 note top: one entry of the servers\nsection
 
-AsyncApiServerType --|> Type
+AsyncApiServerType --|> AsyncApiType
 class AsyncApiChannelType {
         StringType key 
         PublishDescription publish 
@@ -82,7 +88,7 @@ class AsyncApiChannelType {
 
 note top: one entry of the channels\nsection
 
-AsyncApiChannelType --|> Type
+AsyncApiChannelType --|> AsyncApiType
 class PublishDescription {
         Type responseType 
 }
@@ -168,6 +174,7 @@ AmqpSubscriberImplementation  *--  AmqpQueue
     
 XResponseType  *--  Type        
             
+    
     
     
     

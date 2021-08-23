@@ -18,6 +18,7 @@ from yacg.model.model import EnumType, ComplexType, Tag
 from yacg.util.fileUtils import doesFileExist
 
 import yacg.model.openapi as openapi
+import yacg.model.asyncapi as asyncapi
 
 
 class ModelFileContainer:
@@ -62,24 +63,61 @@ def getParsedSchemaFromYaml(model):
         return yaml.load(model, Loader=yaml.FullLoader)
 
 
+def _parseInfoType(modelTypes, parsedSchema):
+    infoDict = parsedSchema.get('info', None)
+    if infoDict is None:
+        return
+    infoType = asyncapi.AsyncApiInfoType()
+    infoType.description = infoDict.get('description', None)
+    infoType.title = infoDict.get('title', None)
+    infoType.version = infoDict.get('version', None)
+    modelTypes.append(infoType)
+
+
+def _parseServerTypes(modelTypes, parsedSchema):
+    serversDict = parsedSchema.get('servers', None)
+    if serversDict is None:
+        return
+    for key in serversDict.keys():
+        serverDict = serversDict.get(key, None)
+        if serverDict is None:
+            continue
+        serverType = asyncapi.AsyncApiServerType()
+        serverType.name = key
+        serverType.url = serverDict.get('url', None)
+        serverType.description = serverDict.get('description', None)
+        serverType.protocol = serverDict.get('protocol', None)
+        serverType.protocolVersion = serverDict.get('protocolVersion', None)
+        modelTypes.append(serverType)
+
+
+def _parseChannelTypes(modelTypes, parsedSchema):
+    channelsDict = parsedSchema.get('channels', None)
+    if channelsDict is None:
+        return
+    for key in channelsDict.keys():
+        channelDict = channelsDict.get(key, None)
+        if channelDict is None:
+            continue
+        channelType = asyncapi.AsyncApiChannelType()
+        channelType.key = key
+        #serverType.url = serverDict.get('url', None)
+        modelTypes.append(channelType)
+
+
 def extractAsyncApiTypes(modelTypes, modelFileContainer):
     """extract the asyncapi specific types from the parsed schema
 
 
     Keyword arguments:
-    parsedSchema -- dictionary with the loaded schema
-    modelFile -- file name and path to the model to load
+    modelTypes -- dictionary with the loaded schema
+    modelFileContainer -- container that bundles data around the file to parse
     """
-    pathDict = modelFileContainer.parsedSchema.get('paths', None)
-    if pathDict is None:
-        return
-    for pathKey in pathDict:
-        pathType = openapi.PathType()
-        pathType.pathPattern = pathKey
-        commandDict = pathDict[pathKey]
-        _extractOpenApiCommandsForPath(pathType, commandDict, modelTypes, modelFileContainer)
-        modelTypes.append(pathType)
-    pass
+
+    parsedSchema = modelFileContainer.parsedSchema
+    _parseInfoType(modelTypes, parsedSchema)
+    _parseServerTypes(modelTypes, parsedSchema)
+    _parseChannelTypes(modelTypes, parsedSchema)
 
 
 def extractTypes(parsedSchema, modelFile, modelTypes, skipOpenApi=False, skipAsyncApi=False):
@@ -148,7 +186,7 @@ def extractTypes(parsedSchema, modelFile, modelTypes, skipOpenApi=False, skipAsy
             modelFileContainer = ModelFileContainer(modelFile, parsedSchema)
             extractOpenApiPathTypes(modelTypes, modelFileContainer)
     if not skipAsyncApi:
-        if (parsedSchema.get('openapi', None) is not None) or (parsedSchema.get('swagger', None) is not None):
+        if parsedSchema.get('asyncapi', None) is not None:
             modelFileContainer = ModelFileContainer(modelFile, parsedSchema)
             extractAsyncApiTypes(modelTypes, modelFileContainer)
     return modelTypes

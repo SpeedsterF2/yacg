@@ -33,6 +33,10 @@ class TestYacgOpenapiModel (unittest.TestCase):
         x = yacg.model.asyncapi.XResponseType()
         self.assertIsNotNone(x)
 
+    def testAsyncApiType(self):
+        x = yacg.model.asyncapi.AsyncApiType()
+        self.assertIsNotNone(x)
+
     def testAsyncApiInfoType(self):
         x = yacg.model.asyncapi.AsyncApiInfoType()
         self.assertIsNotNone(x)

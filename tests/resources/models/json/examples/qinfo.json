@@ -1,0 +1,69 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Query parameters",
+    "description": "Query parameters provide definition for filtering, sorting and paging objects",
+    "version": "1.0.0",
+    "definitions": {
+        "QueryInfo": {
+            "type": "object",
+            "properties": {
+                "sorting": {
+                    "$ref": "#/definitions/Sorting"
+                },
+                "filtering": {
+                    "$ref": "#/definitions/Filtering"
+                }
+            }
+        },
+        "Sorting": {
+            "type": "object",
+            "properties": {
+                "key": {
+                    "type": "string"
+                },
+                "direction": {
+                    "$ref": "#/definitions/SortDirection",
+                    "default": "ASC"
+                }
+            },
+            "required": [
+                "key"
+            ]
+        },
+        "Filtering": {
+            "type": "object",
+            "properties": {
+                "includes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/IncludeFilter"
+                    }
+                }
+            }
+        },
+        "SortDirection": {
+            "type": "string",
+            "enum": [
+                "ASC",
+                "DSC"
+            ]
+        },
+        "IncludeFilter": {
+            "type": "object",
+            "properties": {
+                "key": {
+                    "type": "string"
+                },
+                "includes": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            },
+            "required": [
+                "key"
+            ]
+        }
+    }
+}
