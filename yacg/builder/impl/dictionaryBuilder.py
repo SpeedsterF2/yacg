@@ -91,7 +91,23 @@ def _parseServerTypes(modelTypes, parsedSchema):
         modelTypes.append(serverType)
 
 
-def _parseChannelTypes(modelTypes, parsedSchema):
+def _parseAsyncApiChannelParameters(modelTypes, channelDict, channelType, modelFileContainer):
+    parametersDict = channelDict.get('parameters', None)
+    if parametersDict is None:
+        return
+    for key in parametersDict.keys():
+        paramDict = parametersDict.get(key, None)
+        if paramDict is None:
+            continue
+        paramType = asyncapi.Parameter()
+        paramType.name = key
+        paramType.description = paramDict.get('description', None)
+        __extractParameterType(paramDict, modelTypes, modelFileContainer, paramType, key)
+
+        channelType.parameters.append(paramType)
+
+
+def _parseChannelTypes(modelTypes, parsedSchema, modelFileContainer):
     channelsDict = parsedSchema.get('channels', None)
     if channelsDict is None:
         return
@@ -101,7 +117,8 @@ def _parseChannelTypes(modelTypes, parsedSchema):
             continue
         channelType = asyncapi.AsyncApiChannelType()
         channelType.key = key
-        #serverType.url = serverDict.get('url', None)
+        channelType.description = channelDict.get('description', None)
+        _parseAsyncApiChannelParameters(modelTypes, channelDict, channelType, modelFileContainer)
         modelTypes.append(channelType)
 
 
@@ -117,7 +134,7 @@ def extractAsyncApiTypes(modelTypes, modelFileContainer):
     parsedSchema = modelFileContainer.parsedSchema
     _parseInfoType(modelTypes, parsedSchema)
     _parseServerTypes(modelTypes, parsedSchema)
-    _parseChannelTypes(modelTypes, parsedSchema)
+    _parseChannelTypes(modelTypes, parsedSchema, modelFileContainer)
 
 
 def extractTypes(parsedSchema, modelFile, modelTypes, skipOpenApi=False, skipAsyncApi=False):
@@ -969,28 +986,30 @@ def __extractOpenApiCommandParameters(command, parametersList, modelTypes, model
             parameter.name = param.get('name', None)
             parameter.description = param.get('description', None)
             parameter.required = param.get('required', False)
-            paramSchema = param.get('schema', None)
-            paramType = param.get('type', None)
-            if (paramSchema is None) and (paramType is None):
-                logging.error(
-                    "modelFile: %s, path=%s: missing schema or type entry" %
-                    (modelFileContainer.fileName, command.path))
-                continue
-            if paramSchema is not None:
-                parameter.type = _extractAttribType(
-                    command.operationId.capitalize(),
-                    parameter,
-                    paramSchema,
-                    modelTypes,
-                    modelFileContainer)
-            elif paramType is not None:
-                parameter.type = _extractAttribType(
-                    command.operationId.capitalize(),
-                    parameter,
-                    param,
-                    modelTypes,
-                    modelFileContainer)
+            __extractParameterType(param, modelTypes, modelFileContainer, parameter, command.operationId)
 
+
+def __extractParameterType(paramDict, modelTypes, modelFileContainer, parameterObj, paramName):
+    paramSchema = paramDict.get('schema', None)
+    paramType = paramDict.get('type', None)
+    if (paramSchema is None) and (paramType is None):
+        logging.error(
+            "modelFile: %s, name=%s: missing schema or type entry" %
+            (modelFileContainer.fileName, paramName))
+    if paramSchema is not None:
+        parameterObj.type = _extractAttribType(
+            paramName.capitalize(),
+            parameterObj,
+            paramSchema,
+            modelTypes,
+            modelFileContainer)
+    elif paramType is not None:
+        parameterObj.type = _extractAttribType(
+            paramName.capitalize(),
+            parameterObj,
+            paramDict,
+            modelTypes,
+            modelFileContainer)
 
 def __extractOpenApiCommandResponses(command, responsesDict, modelTypes, modelFileContainer):
     if responsesDict is None:
