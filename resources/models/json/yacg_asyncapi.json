@@ -27,14 +27,6 @@
                 "amqpBinding": {
                     "description": "amqp 0.9.1 related binding parameters",
                     "$ref": "#/definitions/AmqpBinding"
-                },
-                "amqpSubscriberImplementation": {
-                    "description": "basically AMQP queue attributes, set by the subscriber",
-                    "$ref": "#/definitions/AmqpSubscriberImplementation"
-                },
-                "responseType": {
-                    "description": "covers the responded type in RPC style communication",
-                    "$ref": "#/definitions/XResponseType"
                 }
             }
         },
@@ -137,10 +129,13 @@
                 },
                 {
                     "properties": {
+                        "amqpSubscriberImplementation": {
+                            "description": "basically AMQP queue attributes, set by the subscriber",
+                            "$ref": "#/definitions/AmqpSubscriberImplementation"
+                        },
                         "responseType": {
-                            "$comment": "set by x-responseType, only in case of RPC style communication",
-                            "description": "type that is received in response",
-                            "$ref": "./yacg_model_schema.json#/definitions/Type"
+                            "description": "covers the responded type in RPC style communication",
+                            "$ref": "#/definitions/XResponseType"
                         }
                     }
                 }

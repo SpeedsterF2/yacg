@@ -107,6 +107,16 @@ def _parseAsyncApiChannelParameters(modelTypes, channelDict, channelType, modelF
         channelType.parameters.append(paramType)
 
 
+def _parseAsyncApiChannelPublish(modelTypes, channelDict, channelType, modelFileContainer):
+    pass
+    # TODO
+
+
+def _parseAsyncApiChannelSubscribe(modelTypes, channelDict, channelType, modelFileContainer):
+    pass
+    # TODO
+
+
 def _parseChannelTypes(modelTypes, parsedSchema, modelFileContainer):
     channelsDict = parsedSchema.get('channels', None)
     if channelsDict is None:
@@ -119,6 +129,8 @@ def _parseChannelTypes(modelTypes, parsedSchema, modelFileContainer):
         channelType.key = key
         channelType.description = channelDict.get('description', None)
         _parseAsyncApiChannelParameters(modelTypes, channelDict, channelType, modelFileContainer)
+        _parseAsyncApiChannelPublish(modelTypes, channelDict, channelType, modelFileContainer)
+        _parseAsyncApiChannelSubscribe(modelTypes, channelDict, channelType, modelFileContainer)
         modelTypes.append(channelType)
 
 
