@@ -12,7 +12,7 @@ class OperationBase {
 
 class Message {
         XParameter[] xParameters 
-        Type payload 
+        PayloadType payload 
         XTokenContent xToken 
 }
 
@@ -110,6 +110,12 @@ class XParameter {
 
 note top: models the custom parameters
 
+class PayloadType {
+        Type type 
+        BooleanType isArray 
+}
+
+
 class XTokenContent {
         StringType name 
         StringType description 
@@ -152,7 +158,7 @@ OperationBase  *--  AmqpBinding
     
 Message "0" *-- "n" XParameter        
             
-Message  *--  Type        
+Message  *--  PayloadType        
             
 Message  *--  XTokenContent        
             
@@ -186,6 +192,9 @@ XResponseType  *--  Type
             
     
 XParameter  *--  Type        
+            
+    
+PayloadType  *--  Type        
             
     
 XTokenContent  *--  Type        

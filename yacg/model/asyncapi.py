@@ -63,7 +63,7 @@ class Message:
             obj.xParameters.append(
                 XParameter.dictToObject(elemXParameters))
 
-        obj.payload = yacg.model.model.Type.dictToObject(dict.get('payload', None))
+        obj.payload = PayloadType.dictToObject(dict.get('payload', None))
 
         obj.xToken = XTokenContent.dictToObject(dict.get('xToken', None))
         return obj
@@ -386,6 +386,25 @@ class XParameter:
         obj.description = dict.get('description', None)
 
         obj.type = yacg.model.model.Type.dictToObject(dict.get('type', None))
+        return obj
+
+
+class PayloadType:
+    def __init__(self):
+
+        self.type = None
+
+        self.isArray = False
+
+    @classmethod
+    def dictToObject(cls, dict):
+        if dict is None:
+            return None
+        obj = cls()
+
+        obj.type = yacg.model.model.Type.dictToObject(dict.get('type', None))
+
+        obj.isArray = dict.get('isArray', False)
         return obj
 
 

@@ -61,6 +61,10 @@ class TestYacgOpenapiModel (unittest.TestCase):
         x = yacg.model.asyncapi.XParameter()
         self.assertIsNotNone(x)
 
+    def testPayloadType(self):
+        x = yacg.model.asyncapi.PayloadType()
+        self.assertIsNotNone(x)
+
     def testXTokenContent(self):
         x = yacg.model.asyncapi.XTokenContent()
         self.assertIsNotNone(x)
