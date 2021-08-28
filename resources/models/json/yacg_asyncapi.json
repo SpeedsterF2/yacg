@@ -217,7 +217,7 @@
                         "header"
                     ]
                 },
-                "   yTo": {
+                "replyTo": {
                     "type": "string",
                     "default": "amq.rabbitmq.reply-to"
                 }

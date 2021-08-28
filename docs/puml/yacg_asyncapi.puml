@@ -21,7 +21,7 @@ note top: Container that describes the messages\nare sent
 class AmqpBinding {
         StringType exchangeName 
         AmqpBindingExchangeTypeEnum exchangeType 
-        StringType    yTo 
+        StringType replyTo 
 }
 
 note top: specific AMQP binding properties

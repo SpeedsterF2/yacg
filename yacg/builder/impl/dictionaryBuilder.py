@@ -120,10 +120,22 @@ def _initAsyncApiMessage(operationDict, operationType):
     # self.message = None
     # TODO
 
+
 def _initAsyncApiAmqpBinding(operationDict, operationType):
-    pass
-    # self.amqpBinding = None
-    # TODO
+    bindingsDict = operationDict.get('bindings', None)
+    if bindingsDict is None:
+        return
+    amqpDict = bindingsDict.get('amqp', None)
+    if amqpDict is None:
+        return
+    exchangeDict = amqpDict.get('exchange', None)
+    if exchangeDict is None:
+        return
+    amqpBinding = asyncapi.AmqpBinding()
+    amqpBinding.exchangeName = exchangeDict.get('name', None)
+    amqpBinding.exchangeType = asyncapi.AmqpBindingExchangeTypeEnum.valueForString(exchangeDict.get('type', None))
+    amqpBinding.replyTo = exchangeDict.get('replyTo', None)
+
 
 def _parseAsyncApiChannelPublish(modelTypes, channelDict, channelType, modelFileContainer):
     operationDict = channelDict.get('publish', None)

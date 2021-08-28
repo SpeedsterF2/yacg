@@ -82,7 +82,7 @@ class AmqpBinding:
         self.exchangeType = None
 
         #: specific AMQP binding properties
-        self.   yTo = "amq.rabbitmq.reply-to"
+        self.replyTo = "amq.rabbitmq.reply-to"
 
     @classmethod
     def dictToObject(cls, dict):
@@ -94,7 +94,7 @@ class AmqpBinding:
 
         obj.exchangeType = AmqpBindingExchangeTypeEnum.valueForString(dict.get('exchangeType', None))
 
-        obj.   yTo = dict.get('   yTo', "amq.rabbitmq.reply-to")
+        obj.replyTo = dict.get('replyTo', "amq.rabbitmq.reply-to")
         return obj
 
 
