@@ -115,10 +115,32 @@ def _initAsyncApiOperationBase(operationDict, operationType):
     _initAsyncApiAmqpBinding(operationDict, operationType)
 
 
-def _initAsyncApiMessage(operationDict, operationType):
+def _initAsyncApiMessagePayload(messageDict, operationType):
+    payloadDict = messageDict.get('payload', None)
+    if payloadDict is None:
+        return
+    #__getTypeFromSchemaDictAndAsignId(payloadDict, contentEntry, modelTypes, modelFileContainer)
+    # TODO load specific type
     pass
-    # self.message = None
+
+
+def _initAsyncApiMessageXToken(messageDict, operationType):
     # TODO
+    pass
+
+
+def _initAsyncApiMessageXParameter(messageDict, operationType):
+    # TODO
+    pass
+
+
+def _initAsyncApiMessage(operationDict, operationType):
+    messageDict = operationDict.get('message', None)
+    if messageDict is None:
+        return
+    _initAsyncApiMessagePayload(operationDict, operationType)
+    _initAsyncApiMessageXToken(operationDict, operationType)
+    _initAsyncApiMessageXParameter(operationDict, operationType)
 
 
 def _initAsyncApiAmqpBinding(operationDict, operationType):
@@ -135,6 +157,7 @@ def _initAsyncApiAmqpBinding(operationDict, operationType):
     amqpBinding.exchangeName = exchangeDict.get('name', None)
     amqpBinding.exchangeType = asyncapi.AmqpBindingExchangeTypeEnum.valueForString(exchangeDict.get('type', None))
     amqpBinding.replyTo = exchangeDict.get('replyTo', None)
+    operationType.amqpBinding = amqpBinding
 
 
 def _parseAsyncApiChannelPublish(modelTypes, channelDict, channelType, modelFileContainer):
@@ -509,8 +532,6 @@ def _extractArrayType(newTypeName, newProperty, propDict, modelTypes, modelFileC
         newProperty.arrayUniqueItems = propDict.get('uniqueItems', None)
         newProperty.isArray = True
         return _extractAttribType(newTypeName, newProperty, itemsDict, modelTypes, modelFileContainer)
-    # TODO
-    pass
 
 
 def _extractReferenceType(refEntry, modelTypes, modelFileContainer):
@@ -614,7 +635,6 @@ def _extractExternalReferenceTypeFromJson(refEntry, modelTypes, originModelFileC
     parsedSchema = getParsedSchemaFromJson(fileName)
     modelFileContainer = ModelFileContainer(fileName, parsedSchema)
     return _getTypeFromParsedSchema(modelFileContainer, desiredTypeName, modelTypes)
-    # TODO
 
 
 def _extractExternalReferenceTypeFromYaml(refEntry, modelTypes, originModelFileContainer):

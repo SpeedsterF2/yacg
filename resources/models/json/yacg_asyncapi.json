@@ -163,11 +163,24 @@
                 },
                 "payload": {
                     "description": "either a basic or a complex type",
-                    "$ref": "./yacg_model_schema.json#/definitions/Type"
+                    "$ref": "#/definitions/PayloadType"
                 },
                 "xToken": {
                     "description": "claims that are expected as part of a attached JWT token",
                     "$ref": "#/definitions/XTokenContent"
+                }
+            }
+        },
+        "PayloadType": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "description": "meta model type that is passed in the body",
+                    "$ref": "./yacg_model_schema.json#/definitions/Type"
+                },
+                "isArray": {
+                    "type": "boolean",
+                    "default": false
                 }
             }
         },
