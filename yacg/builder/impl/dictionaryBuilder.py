@@ -107,20 +107,20 @@ def _parseAsyncApiChannelParameters(modelTypes, channelDict, channelType, modelF
         channelType.parameters.append(paramType)
 
 
-def _initAsyncApiOperationBase(operationDict, operationType):
+def _initAsyncApiOperationBase(operationDict, operationType, modelTypes, modelFileContainer):
     operationType.operationId = operationDict.get('operationId', None)
     operationType.summary = operationDict.get('summary', None)
     operationType.description = operationDict.get('description', None)
-    _initAsyncApiMessage(operationDict, operationType)
+    _initAsyncApiMessage(operationDict, operationType, modelTypes, modelFileContainer)
     _initAsyncApiAmqpBinding(operationDict, operationType)
 
 
-def _initAsyncApiMessagePayload(messageDict, operationType):
+def _initAsyncApiMessagePayload(messageDict, operationType, modelTypes, modelFileContainer):
     payloadDict = messageDict.get('payload', None)
     if payloadDict is None:
         return
-    #__getTypeFromSchemaDictAndAsignId(payloadDict, contentEntry, modelTypes, modelFileContainer)
-    # TODO load specific type
+    operationType.payload = asyncapi.PayloadType()
+    __getTypeFromSchemaDictAndAsignId(payloadDict, operationType.payload, modelTypes, modelFileContainer)
     pass
 
 
@@ -134,11 +134,11 @@ def _initAsyncApiMessageXParameter(messageDict, operationType):
     pass
 
 
-def _initAsyncApiMessage(operationDict, operationType):
+def _initAsyncApiMessage(operationDict, operationType, modelTypes, modelFileContainer):
     messageDict = operationDict.get('message', None)
     if messageDict is None:
         return
-    _initAsyncApiMessagePayload(operationDict, operationType)
+    _initAsyncApiMessagePayload(operationDict, operationType, modelTypes, modelFileContainer)
     _initAsyncApiMessageXToken(operationDict, operationType)
     _initAsyncApiMessageXParameter(operationDict, operationType)
 
@@ -165,15 +165,17 @@ def _parseAsyncApiChannelPublish(modelTypes, channelDict, channelType, modelFile
     if operationDict is None:
         return
     publishType = asyncapi.PublishDescription()
-    _initAsyncApiOperationBase(operationDict, publishType)
+    channelType.publish = publishType
+    _initAsyncApiOperationBase(operationDict, publishType, modelTypes, modelFileContainer)
     # TODO
 
 
 def _parseAsyncApiChannelSubscribe(modelTypes, channelDict, channelType, modelFileContainer):
-    operationDict = channelDict.get('publish', None)
+    operationDict = channelDict.get('subscribe', None)
     if operationDict is None:
         return
     subscribeType = asyncapi.SubscribeDescription()
+    channelType.subscribe = subscribeType
     _initAsyncApiOperationBase(operationDict, subscribeType)
     # TODO
 
