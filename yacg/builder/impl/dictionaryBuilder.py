@@ -121,7 +121,6 @@ def _initAsyncApiMessagePayload(messageDict, operationType, modelTypes, modelFil
         return
     operationType.payload = asyncapi.PayloadType()
     __getTypeFromSchemaDictAndAsignId(payloadDict, operationType.payload, modelTypes, modelFileContainer)
-    pass
 
 
 def _initAsyncApiMessageXToken(messageDict, operationType):
@@ -138,9 +137,9 @@ def _initAsyncApiMessage(operationDict, operationType, modelTypes, modelFileCont
     messageDict = operationDict.get('message', None)
     if messageDict is None:
         return
-    _initAsyncApiMessagePayload(operationDict, operationType, modelTypes, modelFileContainer)
-    _initAsyncApiMessageXToken(operationDict, operationType)
-    _initAsyncApiMessageXParameter(operationDict, operationType)
+    _initAsyncApiMessagePayload(messageDict, operationType, modelTypes, modelFileContainer)
+    _initAsyncApiMessageXToken(messageDict, operationType)
+    _initAsyncApiMessageXParameter(messageDict, operationType)
 
 
 def _initAsyncApiAmqpBinding(operationDict, operationType):
@@ -698,7 +697,7 @@ def _getTypeFromParsedSchema(modelFileContainer, desiredTypeName, modelTypes):
     newModelTypes = _extractTypeAndRelatedTypes(modelFileContainer, desiredTypeName, modelTypes)
     desiredType = None
     for type in newModelTypes:
-        if (type.name == desiredTypeName) and (type.source == modelFileContainer.fileName):
+        if hasattr(type, 'name') and (type.name == desiredTypeName) and (type.source == modelFileContainer.fileName):
             desiredType = type
             break
     if desiredType is None:
@@ -734,7 +733,7 @@ def _getAlreadyLoadedType(typeName, typeSource, alreadyLoadedModelTypes):
     """
 
     for type in alreadyLoadedModelTypes:
-        if (typeName == type.name) and (typeSource == type.source):
+        if hasattr(type, 'name') and (typeName == type.name) and (typeSource == type.source):
             return type
     return None
 
@@ -769,7 +768,7 @@ def _getTypeIfAlreadyLoaded(typeName, fileName, modelTypes):
     """
 
     for type in modelTypes:
-        if (type.name == typeName) and (fileName == type.source):
+        if hasattr(type, 'name') and (type.name == typeName) and (fileName == type.source):
             return type
     return None
 

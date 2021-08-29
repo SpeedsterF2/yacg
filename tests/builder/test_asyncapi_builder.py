@@ -8,7 +8,7 @@ import yacg.model.modelFuncs as modelFuncs
 
 class TestAsyncApiParsing (unittest.TestCase):
 
-    def test_openApiExample(self):
+    def test_asyncApiExample(self):
         modelFile = 'tests/resources/models/json/examples/asyncapi_test.json'
         modelFileExists = os.path.isfile(modelFile)
         self.assertTrue('model file exists: ' + modelFile, modelFileExists)
