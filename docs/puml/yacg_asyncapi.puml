@@ -106,6 +106,7 @@ class XParameter {
         StringType name 
         StringType description 
         Type type 
+        BooleanType isArray 
 }
 
 note top: models the custom parameters

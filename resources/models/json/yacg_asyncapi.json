@@ -196,6 +196,10 @@
                 },
                 "type": {
                     "$ref": "./yacg_model_schema.json#/definitions/Type"
+                },
+                "isArray": {
+                    "type": "boolean",
+                    "default": false
                 }
             }
         },

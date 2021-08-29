@@ -375,6 +375,9 @@ class XParameter:
         #: models the custom parameters
         self.type = None
 
+        #: models the custom parameters
+        self.isArray = False
+
     @classmethod
     def dictToObject(cls, dict):
         if dict is None:
@@ -386,6 +389,8 @@ class XParameter:
         obj.description = dict.get('description', None)
 
         obj.type = yacg.model.model.Type.dictToObject(dict.get('type', None))
+
+        obj.isArray = dict.get('isArray', False)
         return obj
 
 
