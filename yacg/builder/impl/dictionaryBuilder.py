@@ -121,6 +121,15 @@ def _initAsyncApiMessagePayload(messageDict, operationType, modelTypes, modelFil
         return
     operationType.payload = asyncapi.PayloadType()
     __getTypeFromSchemaDictAndAsignId(payloadDict, operationType.payload, modelTypes, modelFileContainer)
+    if operationType.payload.type is None:
+        # TODO want to have inner arrays, too
+        typeEntry = payloadDict.get('type', None)
+        if (typeEntry is None):
+            return
+        propertiesDict = payloadDict.get('properties', None)
+        if propertiesDict is not None:
+            operationType.payload.type = _extractObjectType(operationType.operationId, propertiesDict, None, None, modelTypes, modelFileContainer)  
+        pass
 
 
 def _initAsyncApiMessageXToken(messageDict, operationType):

@@ -37,7 +37,16 @@
                 "summary": "published to that endpoint and trigger the endpoint",
                 "message": {
                     "payload": {
-                        "$ref": "./model_with_bytes.json#/definitions/Job"
+                        "type": "object",
+                        "properties": {
+                            "user": {
+                                "type": "string",
+                                "format": "uuid "
+                            },
+                            "job": {
+                                "$ref": "./model_with_bytes.json#/definitions/Job"
+                            }
+                        }
                     }
                 },
                 "bindings": {
