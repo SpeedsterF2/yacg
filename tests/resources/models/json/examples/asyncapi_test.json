@@ -14,6 +14,64 @@
         }
     },
     "channels": {
+        "xxy.{param1}.yyx.{param2}": {
+            "description": "First channel",
+            "parameters": {
+                "param1": {
+                    "description": "a param",
+                    "schema": {
+                        "type": "string",
+                        "format": "uuid"
+                    }
+                },
+                "param2": {
+                    "description": "another param",
+                    "schema": {
+                        "type": "string",
+                        "format": "uuid"
+                    }
+                }
+            },
+            "publish": {
+                "operationId": "writeXxxData2",
+                "summary": "published to that endpoint and trigger the endpoint",
+                "message": {
+                    "payload": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "format": "uuid "
+                                },
+                                "job": {
+                                    "$ref": "./model_with_bytes.json#/definitions/Job"
+                                },
+                                "valid": {
+                                    "type": "boolean"
+                                }
+                            }    
+                        }
+                    }
+                },
+                "bindings": {
+                    "amqp": {
+                        "exchange": {
+                            "name": "zzz",
+                            "type": "topic"
+                        }
+                    }
+                },
+                "x-subscriber-implementation": {
+                    "x-queue": {
+                        "type": "classic",
+                        "durable": false,
+                        "exclusive": false
+                    }
+                }
+            }
+        },
         "xxx.{param1}.yyy.{param2}": {
             "description": "First channel",
             "parameters": {

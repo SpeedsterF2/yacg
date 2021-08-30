@@ -27,6 +27,7 @@ class ModelFileContainer:
         self.parsedSchema = parsedSchema
         self.version = parsedSchema.get('version', None)
         self.domain = parsedSchema.get('x-domain', None)
+        self.innerTypeNames = {} # will store the number of current used inner type names
 
 
 def getParsedSchemaFromJson(model):
@@ -120,16 +121,7 @@ def _initAsyncApiMessagePayload(messageDict, operationType, modelTypes, modelFil
     if payloadDict is None:
         return
     operationType.payload = asyncapi.PayloadType()
-    __getTypeFromSchemaDictAndAsignId(payloadDict, operationType.payload, modelTypes, modelFileContainer)
-    if operationType.payload.type is None:
-        # TODO want to have inner arrays, too
-        typeEntry = payloadDict.get('type', None)
-        if (typeEntry is None):
-            return
-        propertiesDict = payloadDict.get('properties', None)
-        if propertiesDict is not None:
-            operationType.payload.type = _extractObjectType(operationType.operationId, propertiesDict, None, None, modelTypes, modelFileContainer)  
-        pass
+    __getTypeFromSchemaDictAndAsignId(payloadDict, operationType.payload, modelTypes, modelFileContainer, operationType.operationId)
 
 
 def _initAsyncApiMessageXToken(messageDict, operationType):
@@ -1012,10 +1004,10 @@ def __extractOpenApiRequestBody(command, requestBodyDict, modelTypes, modelFileC
     requestBody.description = requestBodyDict.get('description', None)
     requestBody.required = requestBodyDict.get('required', None)
     contentDict = requestBodyDict.get('content', None)
-    __extractOpenApiContentSectionAndAppend(contentDict, requestBody, modelTypes, modelFileContainer)
+    __extractOpenApiContentSectionAndAppend(contentDict, requestBody, modelTypes, modelFileContainer, command.operationId)
 
 
-def __extractOpenApiContentSectionAndAppend(contentDict, contentHost, modelTypes, modelFileContainer):
+def __extractOpenApiContentSectionAndAppend(contentDict, contentHost, modelTypes, modelFileContainer, innerTypeName):
     if contentDict is None:
         return
     for contentDictKey in contentDict.keys():
@@ -1023,11 +1015,11 @@ def __extractOpenApiContentSectionAndAppend(contentDict, contentHost, modelTypes
         contentEntry = openapi.ContentEntry()
         contentEntry.mimeType = contentDictKey
         schema = content.get('schema', None)
-        __getTypeFromSchemaDictAndAsignId(schema, contentEntry, modelTypes, modelFileContainer)
+        __getTypeFromSchemaDictAndAsignId(schema, contentEntry, modelTypes, modelFileContainer, innerTypeName)
         contentHost.content.append(contentEntry)
 
 
-def __getTypeFromSchemaDictAndAsignId(schema, typeHost, modelTypes, modelFileContainer):
+def __getTypeFromSchemaDictAndAsignId(schema, typeHost, modelTypes, modelFileContainer, innerTypeName):
     if schema is None:
         return
     itemsEntry = schema.get("items", None)
@@ -1040,9 +1032,19 @@ def __getTypeFromSchemaDictAndAsignId(schema, typeHost, modelTypes, modelFileCon
     if refEntry is not None:
         typeHost.type = _extractReferenceType(refEntry, modelTypes, modelFileContainer)
     else:
-        errorMsg = 'Missing refEntry for requestBody entry!'
-        errorMsg2 = ' Attention, inner type declarations are currently not implemented for PathTypes.'
-        logging.error(errorMsg + errorMsg2)
+        dictToUse = itemsEntry if typeHost.isArray is True else schema
+        propertiesDict = dictToUse.get('properties', None)
+        if propertiesDict is not None:
+            # this handling is needed because for the same e.g. operationId can exists
+            # more inner type definitions
+            currentInnerTypeCount = modelFileContainer.innerTypeNames.get(innerTypeName, 1)
+            currentInnerTypeCount = currentInnerTypeCount + 1
+            newInnerTypeName = '{}_{}'.format(innerTypeName, currentInnerTypeCount)
+            modelFileContainer.innerTypeNames[innerTypeName] = currentInnerTypeCount
+            typeHost.type = _extractObjectType(newInnerTypeName, propertiesDict, None, None, modelTypes, modelFileContainer)
+        else:
+            errorMsg = 'Attention, inner type declarations are currently not implemented for some additional model scenarios.'
+            logging.error(errorMsg)
 
 
 def __extractOpenApiCommandParameters(command, parametersList, modelTypes, modelFileContainer):
@@ -1058,7 +1060,7 @@ def __extractOpenApiCommandParameters(command, parametersList, modelTypes, model
             if schema is not None:
                 contentEntry = openapi.ContentEntry()
                 requestBody.content.append(contentEntry)
-                __getTypeFromSchemaDictAndAsignId(schema, contentEntry, modelTypes, modelFileContainer)
+                __getTypeFromSchemaDictAndAsignId(schema, contentEntry, modelTypes, modelFileContainer, command.operationId)
         else:
             parameter = openapi.Parameter()
             command.parameters.append(parameter)
@@ -1102,11 +1104,11 @@ def __extractOpenApiCommandResponses(command, responsesDict, modelTypes, modelFi
         response.description = responseDict.get('description', None)
         contentDict = responseDict.get('content', None)
         if contentDict is not None:
-            __extractOpenApiContentSectionAndAppend(contentDict, response, modelTypes, modelFileContainer)
+            __extractOpenApiContentSectionAndAppend(contentDict, response, modelTypes, modelFileContainer, command.operationId)
         else:
             # swagger v2
             schema = responseDict.get('schema', None)
             if schema is not None:
                 contentEntry = openapi.ContentEntry()
                 response.content.append(contentEntry)
-                __getTypeFromSchemaDictAndAsignId(schema, contentEntry, modelTypes, modelFileContainer)
+                __getTypeFromSchemaDictAndAsignId(schema, contentEntry, modelTypes, modelFileContainer, command.operationId)
