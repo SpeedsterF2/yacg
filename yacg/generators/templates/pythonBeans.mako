@@ -98,7 +98,11 @@ class ${type.name}${ ' ({})'.format(pythonFuncs.getExtendsType(type, modelTypes,
     def dictToObject(cls, dict):
         if dict is None:
             return None
+        % if type.extendsType is not None:
+        obj = type.extendsType.name.dictToObject(dict)
+        % else:
         obj = cls()
+        % endif
         % for property in type.properties:
             % if modelFuncs.isBaseType(property.type):
                 % if not property.isArray:
