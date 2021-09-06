@@ -17,6 +17,10 @@ class TestYacgOpenapiModel (unittest.TestCase):
         x = yacg.model.asyncapi.Message()
         self.assertIsNotNone(x)
 
+    def testXTokenContent(self):
+        x = yacg.model.asyncapi.XTokenContent()
+        self.assertIsNotNone(x)
+
     def testAmqpBinding(self):
         x = yacg.model.asyncapi.AmqpBinding()
         self.assertIsNotNone(x)
@@ -63,10 +67,6 @@ class TestYacgOpenapiModel (unittest.TestCase):
 
     def testPayloadType(self):
         x = yacg.model.asyncapi.PayloadType()
-        self.assertIsNotNone(x)
-
-    def testXTokenContent(self):
-        x = yacg.model.asyncapi.XTokenContent()
         self.assertIsNotNone(x)
 
     def testAmqpBindingExchangeTypeEnum(self):

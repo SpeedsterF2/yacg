@@ -3,10 +3,18 @@ import os
 
 import yacg.builder.impl.dictionaryBuilder as dictionaryBuilder
 import yacg.model.openapi as openapi
+import yacg.model.asyncapi as asyncapi
 import yacg.model.modelFuncs as modelFuncs
 
 
 class TestAsyncApiParsing (unittest.TestCase):
+    def test_inheritance(self):
+        modelFile = 'tests/resources/models/json/examples/test_inheritance.json'
+        modelFileExists = os.path.isfile(modelFile)
+        self.assertTrue('model file exists: ' + modelFile, modelFileExists)
+        parsedSchema = dictionaryBuilder.getParsedSchemaFromJson(modelFile)
+        obj = asyncapi.PublishDescription.dictToObject(parsedSchema)
+        print(obj)
 
     def test_asyncApiExample(self):
         modelFile = 'tests/resources/models/json/examples/asyncapi_test.json'

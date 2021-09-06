@@ -1,0 +1,40 @@
+{
+    "operationId": "ttGetAll",
+    "summary": "get all stored tt's",
+    "message": {
+        "x-parameters": {
+            "filtering": {
+                "description": "json serialized filter object. By default adds 'isTemplate=false'",
+                "$ref": "./qinfo.json#/definitions/Filtering"
+            },
+            "sorting": {
+                "description": "json serialized sorting object",
+                "$ref": "./qinfo.json#/definitions/Sorting"
+            }
+        }
+    },
+    "x-token": {
+        "testId": {
+            "$comment": "some token",
+            "description": "testId claim in the token",
+            "type": "string",
+            "format": "uuid"
+        }
+    },
+    "x-responseType": {
+        "description": "collection of requested items",
+        "type": "array",
+        "items": {
+            "$ref": "./simple_allof.json"
+        }
+    },
+    "bindings": {
+        "amqp": {
+            "exchange": {
+                "name": "{ttServiceId}",
+                "type": "topic",
+                "replyTo": "dynamicQueueName"
+            }
+        }
+    }
+}

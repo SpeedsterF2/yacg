@@ -113,7 +113,7 @@ def _initAsyncApiOperationBase(operationDict, operationType, modelTypes, modelFi
     operationType.summary = operationDict.get('summary', None)
     operationType.description = operationDict.get('description', None)
     _initAsyncApiMessage(operationDict, operationType, modelTypes, modelFileContainer)
-    _initAsyncApiXToken(operationDict, operationType)
+    _initAsyncApiXToken(operationDict, operationType, modelTypes, modelFileContainer)
     _initAsyncApiAmqpBinding(operationDict, operationType)
 
 
@@ -125,14 +125,19 @@ def _initAsyncApiMessagePayload(messageDict, operationType, modelTypes, modelFil
     __getTypeFromSchemaDictAndAsignId(payloadDict, operationType.payload, modelTypes, modelFileContainer, operationType.operationId)
 
 
-def _initAsyncApiXToken(operationDict, operationType):
+def _initAsyncApiXToken(operationDict, operationType, modelTypes, modelFileContainer):
     tokenDict = operationDict.get('x-token', None)
     if tokenDict is None:
         return
     for key in tokenDict.keys():
         tokenContent = asyncapi.XTokenContent()
-        # TODO
-        operationDict.xToken.append(tokenContent)
+        contentDict = tokenDict.get(key, None)
+        if contentDict is None:
+            continue
+        tokenContent.description = contentDict.get('description', None)
+        tokenContent.name = key
+        __getTypeFromSchemaDictAndAsignId(contentDict, tokenContent, modelTypes, modelFileContainer, operationType.operationId)
+        operationType.xToken.append(tokenContent)
 
 
 def _initAsyncApiMessageXParameter(messageDict, operationType):

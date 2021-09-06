@@ -24,6 +24,13 @@
                     "description": "some words to explain to topic",
                     "$ref": "#/definitions/Message"
                 },
+                "xToken": {
+                    "description": "claims that are expected as part of a attached JWT token",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/XTokenContent"
+                    }
+                },
                 "amqpBinding": {
                     "description": "amqp 0.9.1 related binding parameters",
                     "$ref": "#/definitions/AmqpBinding"
@@ -164,13 +171,6 @@
                 "payload": {
                     "description": "either a basic or a complex type",
                     "$ref": "#/definitions/PayloadType"
-                },
-                "xToken": {
-                    "description": "claims that are expected as part of a attached JWT token",
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/XTokenContent"
-                    }
                 }
             }
         },
@@ -218,6 +218,9 @@
                 },
                 "type": {
                     "$ref": "./yacg_model_schema.json#/definitions/Type"
+                },
+                "isArray": {
+                    "type": "boolean"
                 }
             }
         },

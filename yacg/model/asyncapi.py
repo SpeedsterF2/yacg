@@ -17,6 +17,8 @@ class OperationBase:
 
         self.message = None
 
+        self.xToken = []
+
         self.amqpBinding = None
 
     @classmethod
@@ -32,6 +34,11 @@ class OperationBase:
         obj.description = dict.get('description', None)
 
         obj.message = Message.dictToObject(dict.get('message', None))
+
+        arrayXToken = dict.get('xToken', [])
+        for elemXToken in arrayXToken:
+            obj.xToken.append(
+                XTokenContent.dictToObject(elemXToken))
 
         obj.amqpBinding = AmqpBinding.dictToObject(dict.get('amqpBinding', None))
         return obj
@@ -49,9 +56,6 @@ class Message:
         #: Container that describes the messages are sent
         self.payload = None
 
-        #: Container that describes the messages are sent
-        self.xToken = None
-
     @classmethod
     def dictToObject(cls, dict):
         if dict is None:
@@ -64,8 +68,40 @@ class Message:
                 XParameter.dictToObject(elemXParameters))
 
         obj.payload = PayloadType.dictToObject(dict.get('payload', None))
+        return obj
 
-        obj.xToken = XTokenContent.dictToObject(dict.get('xToken', None))
+
+class XTokenContent:
+    """ claim that is expected as part of a attached JWT token
+    """
+
+    def __init__(self):
+
+        #: claim that is expected as part of a attached JWT token
+        self.name = None
+
+        #: claim that is expected as part of a attached JWT token
+        self.description = None
+
+        #: claim that is expected as part of a attached JWT token
+        self.type = None
+
+        #: claim that is expected as part of a attached JWT token
+        self.isArray = None
+
+    @classmethod
+    def dictToObject(cls, dict):
+        if dict is None:
+            return None
+        obj = cls()
+
+        obj.name = dict.get('name', None)
+
+        obj.description = dict.get('description', None)
+
+        obj.type = yacg.model.model.Type.dictToObject(dict.get('type', None))
+
+        obj.isArray = dict.get('isArray', None)
         return obj
 
 
@@ -273,8 +309,7 @@ class PublishDescription (OperationBase):
     def dictToObject(cls, dict):
         if dict is None:
             return None
-        obj = cls()
-
+        obj = OperationBase.dictToObject(dict)
         obj.amqpSubscriberImplementation = AmqpSubscriberImplementation.dictToObject(dict.get('amqpSubscriberImplementation', None))
 
         obj.responseType = XResponseType.dictToObject(dict.get('responseType', None))
@@ -410,35 +445,6 @@ class PayloadType:
         obj.type = yacg.model.model.Type.dictToObject(dict.get('type', None))
 
         obj.isArray = dict.get('isArray', False)
-        return obj
-
-
-class XTokenContent:
-    """ claim that is expected as part of a attached JWT token
-    """
-
-    def __init__(self):
-
-        #: claim that is expected as part of a attached JWT token
-        self.name = None
-
-        #: claim that is expected as part of a attached JWT token
-        self.description = None
-
-        #: claim that is expected as part of a attached JWT token
-        self.type = None
-
-    @classmethod
-    def dictToObject(cls, dict):
-        if dict is None:
-            return None
-        obj = cls()
-
-        obj.name = dict.get('name', None)
-
-        obj.description = dict.get('description', None)
-
-        obj.type = yacg.model.model.Type.dictToObject(dict.get('type', None))
         return obj
 
 
