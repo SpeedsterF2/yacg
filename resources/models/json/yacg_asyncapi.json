@@ -167,7 +167,10 @@
                 },
                 "xToken": {
                     "description": "claims that are expected as part of a attached JWT token",
-                    "$ref": "#/definitions/XTokenContent"
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/XTokenContent"
+                    }
                 }
             }
         },
