@@ -80,7 +80,7 @@ class ${type.name}${ ' ({})'.format(pythonFuncs.getExtendsType(type, modelTypes,
         % endif
     def __init__(self):
         % if type.extendsType is not None:
-        super(${pythonFuncs.getExtendsType(type, modelTypes, baseModelDomain)}, self).__init__()
+        super(${type.name}, self).__init__()
         % endif
         % if len(type.properties) == 0:
         pass
@@ -99,7 +99,7 @@ class ${type.name}${ ' ({})'.format(pythonFuncs.getExtendsType(type, modelTypes,
         if dict is None:
             return None
         % if type.extendsType is not None:
-        obj = type.extendsType.name.dictToObject(dict)
+        obj = ${type.extendsType.name}.dictToObject(dict)
         % else:
         obj = cls()
         % endif

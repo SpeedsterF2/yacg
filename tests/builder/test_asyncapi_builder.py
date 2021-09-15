@@ -14,7 +14,8 @@ class TestAsyncApiParsing (unittest.TestCase):
         self.assertTrue('model file exists: ' + modelFile, modelFileExists)
         parsedSchema = dictionaryBuilder.getParsedSchemaFromJson(modelFile)
         obj = asyncapi.PublishDescription.dictToObject(parsedSchema)
-        print(obj)
+        self.assertTrue(hasattr(obj, 'xToken'))
+        self.assertTrue(hasattr(obj, 'message'))
 
     def test_asyncApiExample(self):
         modelFile = 'tests/resources/models/json/examples/asyncapi_test.json'

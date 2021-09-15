@@ -25,7 +25,7 @@ class IntegerType (Type):
     """
 
     def __init__(self):
-        super(Type, self).__init__()
+        super(IntegerType, self).__init__()
 
         #: integer values
         self.format = None
@@ -49,7 +49,7 @@ class IntegerType (Type):
     def dictToObject(cls, dict):
         if dict is None:
             return None
-        obj = cls()
+        obj = Type.dictToObject(dict)
 
         obj.format = IntegerTypeFormatEnum.valueForString(dict.get('format', None))
 
@@ -99,7 +99,7 @@ class NumberType (Type):
     """
 
     def __init__(self):
-        super(Type, self).__init__()
+        super(NumberType, self).__init__()
 
         #: floating point values
         self.format = None
@@ -123,7 +123,7 @@ class NumberType (Type):
     def dictToObject(cls, dict):
         if dict is None:
             return None
-        obj = cls()
+        obj = Type.dictToObject(dict)
 
         obj.format = NumberTypeFormatEnum.valueForString(dict.get('format', None))
 
@@ -173,7 +173,7 @@ class BooleanType (Type):
     """
 
     def __init__(self):
-        super(Type, self).__init__()
+        super(BooleanType, self).__init__()
 
         #: boolean values
         self.default = None
@@ -182,7 +182,7 @@ class BooleanType (Type):
     def dictToObject(cls, dict):
         if dict is None:
             return None
-        obj = cls()
+        obj = Type.dictToObject(dict)
 
         obj.default = dict.get('default', None)
         return obj
@@ -193,7 +193,7 @@ class StringType (Type):
     """
 
     def __init__(self):
-        super(Type, self).__init__()
+        super(StringType, self).__init__()
 
         #: integer values
         self.default = None
@@ -202,7 +202,7 @@ class StringType (Type):
     def dictToObject(cls, dict):
         if dict is None:
             return None
-        obj = cls()
+        obj = Type.dictToObject(dict)
 
         obj.default = dict.get('default', None)
         return obj
@@ -213,7 +213,7 @@ class UuidType (Type):
     """
 
     def __init__(self):
-        super(Type, self).__init__()
+        super(UuidType, self).__init__()
 
         #: UUID values
         self.default = None
@@ -222,7 +222,7 @@ class UuidType (Type):
     def dictToObject(cls, dict):
         if dict is None:
             return None
-        obj = cls()
+        obj = Type.dictToObject(dict)
 
         obj.default = dict.get('default', None)
         return obj
@@ -233,7 +233,7 @@ class EnumType (Type):
     """
 
     def __init__(self):
-        super(Type, self).__init__()
+        super(EnumType, self).__init__()
 
         #: type for enum values - fixed value types
         self.version = None
@@ -263,7 +263,7 @@ class EnumType (Type):
     def dictToObject(cls, dict):
         if dict is None:
             return None
-        obj = cls()
+        obj = Type.dictToObject(dict)
 
         obj.version = dict.get('version', None)
 
@@ -317,7 +317,7 @@ class DateType (Type):
     """
 
     def __init__(self):
-        super(Type, self).__init__()
+        super(DateType, self).__init__()
 
         #: type for date values
         self.default = None
@@ -338,7 +338,7 @@ class DateType (Type):
     def dictToObject(cls, dict):
         if dict is None:
             return None
-        obj = cls()
+        obj = Type.dictToObject(dict)
 
         obj.default = dict.get('default', None)
 
@@ -357,7 +357,7 @@ class DateTimeType (Type):
     """
 
     def __init__(self):
-        super(Type, self).__init__()
+        super(DateTimeType, self).__init__()
 
         #: type for timestamp values
         self.default = None
@@ -378,7 +378,7 @@ class DateTimeType (Type):
     def dictToObject(cls, dict):
         if dict is None:
             return None
-        obj = cls()
+        obj = Type.dictToObject(dict)
 
         obj.default = dict.get('default', None)
 
@@ -397,7 +397,7 @@ class BytesType (Type):
     """
 
     def __init__(self):
-        super(Type, self).__init__()
+        super(BytesType, self).__init__()
 
         #: type for byte values, it will usually be rendered to a byte array
         self.default = None
@@ -406,7 +406,7 @@ class BytesType (Type):
     def dictToObject(cls, dict):
         if dict is None:
             return None
-        obj = cls()
+        obj = Type.dictToObject(dict)
 
         obj.default = dict.get('default', None)
         return obj
@@ -417,7 +417,7 @@ class ComplexType (Type):
     """
 
     def __init__(self):
-        super(Type, self).__init__()
+        super(ComplexType, self).__init__()
 
         #: complex type description
         self.version = None
@@ -453,7 +453,7 @@ class ComplexType (Type):
     def dictToObject(cls, dict):
         if dict is None:
             return None
-        obj = cls()
+        obj = Type.dictToObject(dict)
 
         obj.version = dict.get('version', None)
 

@@ -11,7 +11,7 @@ class PathType (yacg.model.model.Type):
     """
 
     def __init__(self):
-        super(yacg.model.model.Type, self).__init__()
+        super(PathType, self).__init__()
 
         #: base type that contains all REST path information
         self.pathPattern = None
@@ -23,7 +23,7 @@ class PathType (yacg.model.model.Type):
     def dictToObject(cls, dict):
         if dict is None:
             return None
-        obj = cls()
+        obj = Type.dictToObject(dict)
 
         obj.pathPattern = dict.get('pathPattern', None)
 

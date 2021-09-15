@@ -139,14 +139,14 @@ class AsyncApiType (yacg.model.model.Type):
     """
 
     def __init__(self):
-        super(yacg.model.model.Type, self).__init__()
+        super(AsyncApiType, self).__init__()
         pass
 
     @classmethod
     def dictToObject(cls, dict):
         if dict is None:
             return None
-        obj = cls()
+        obj = Type.dictToObject(dict)
         return obj
 
 
@@ -155,7 +155,7 @@ class AsyncApiInfoType (AsyncApiType):
     """
 
     def __init__(self):
-        super(AsyncApiType, self).__init__()
+        super(AsyncApiInfoType, self).__init__()
 
         #: Subset of the info object attribs: https://www.asyncapi.com/docs/specifications/v2.0.0#infoObject
         self.title = None
@@ -170,7 +170,7 @@ class AsyncApiInfoType (AsyncApiType):
     def dictToObject(cls, dict):
         if dict is None:
             return None
-        obj = cls()
+        obj = AsyncApiType.dictToObject(dict)
 
         obj.title = dict.get('title', None)
 
@@ -185,7 +185,7 @@ class AsyncApiServerType (AsyncApiType):
     """
 
     def __init__(self):
-        super(AsyncApiType, self).__init__()
+        super(AsyncApiServerType, self).__init__()
 
         #: one entry of the servers section
         self.name = None
@@ -206,7 +206,7 @@ class AsyncApiServerType (AsyncApiType):
     def dictToObject(cls, dict):
         if dict is None:
             return None
-        obj = cls()
+        obj = AsyncApiType.dictToObject(dict)
 
         obj.name = dict.get('name', None)
 
@@ -225,7 +225,7 @@ class AsyncApiChannelType (AsyncApiType):
     """
 
     def __init__(self):
-        super(AsyncApiType, self).__init__()
+        super(AsyncApiChannelType, self).__init__()
 
         #: one entry of the channels section
         self.key = None
@@ -246,7 +246,7 @@ class AsyncApiChannelType (AsyncApiType):
     def dictToObject(cls, dict):
         if dict is None:
             return None
-        obj = cls()
+        obj = AsyncApiType.dictToObject(dict)
 
         obj.key = dict.get('key', None)
 
@@ -297,7 +297,7 @@ class PublishDescription (OperationBase):
     """
 
     def __init__(self):
-        super(OperationBase, self).__init__()
+        super(PublishDescription, self).__init__()
 
         #: Configuration parameter needed for publishing
         self.amqpSubscriberImplementation = None
@@ -310,6 +310,7 @@ class PublishDescription (OperationBase):
         if dict is None:
             return None
         obj = OperationBase.dictToObject(dict)
+
         obj.amqpSubscriberImplementation = AmqpSubscriberImplementation.dictToObject(dict.get('amqpSubscriberImplementation', None))
 
         obj.responseType = XResponseType.dictToObject(dict.get('responseType', None))
@@ -321,14 +322,14 @@ class SubscribeDescription (OperationBase):
     """
 
     def __init__(self):
-        super(OperationBase, self).__init__()
+        super(SubscribeDescription, self).__init__()
         pass
 
     @classmethod
     def dictToObject(cls, dict):
         if dict is None:
             return None
-        obj = cls()
+        obj = OperationBase.dictToObject(dict)
         return obj
 
 
